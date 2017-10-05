@@ -16,7 +16,19 @@ export default class ChatView extends Component {
 
   constructor(props) {
     super(props);
-    var randomId = {id: uuidv1()}
+    var randomId = ''
+
+    var getdataValue = Promise.resolve(this.getData())
+                      .then(function(value) {
+                        console.log('the value from promise', value); // "Success"
+                        if (value !== null) {
+                          randomId = value
+                          console.log('the value of randomId from value', randomId);
+                        } else {
+                          console.log('NULL brah');
+                          randomId = {id: uuidv1()}
+                        }
+                      })
     console.log('this is the randomId in object', randomId.id)
     this.state = {
       messages: [],
@@ -24,57 +36,16 @@ export default class ChatView extends Component {
       user: randomId.id
     }
     console.log('this is the state', this.state);
-    AsyncStorage.setItem('userId', JSON.stringify(randomId), () => {
-      AsyncStorage.getItem('userId', (err, result) => {
-        console.log('the result from async', result);
-      });
-    });
     console.log('this is the state userid', this.state.user)
     var userFirebaseChild = this.state.user
     this.itemsRef = this.getRef().child('jofi/'+this.state.user);
   }
 
-  // constructor(props) {
-  //   super(props);
-  //   var randomId = '123'
-  //   var value = Promise.resolve(this.getData())
-  //
-  //
-  //   // AsyncStorage.setItem('userId', randomId, () => {
-  //   //   // console.log('---result',result)
-  //   //   AsyncStorage.getItem('userId', (err, result) => {
-  //   //     console.log('the result from async', result);
-  //   //   });
-  //   // });
-  //
-  //   console.log('---- value',value)
-  //
-  //     if (value !== null){
-  //
-  //       randomId = value
-  //     } else {
-  //       randomId = {id: uuidv1()}
-  //       console.log('this is the randomId in object', randomId.id)
-  //
-  //     }
-  //
-  //   this.state = {
-  //     messages: [],
-  //     inputBarText: '',
-  //     user: randomId
-  //   }
-  //   console.log('this is the state', this.state);
-  //
-  //   console.log('this is the state userid', this.state.user)
-  //   var userFirebaseChild = this.state.user
-  //   this.itemsRef = this.getRef().child('jofi/'+this.state.user);
-  // }
-  //
-  // async getData(){
-  //   const userId = await AsyncStorage.getItem('userId');
-  //   console.log('user ID', userId)
-  //   return userId
-  // }
+  async getData(){
+    const userId = await AsyncStorage.getItem('userId');
+    console.log('user ID', userId)
+    return userId
+  }
 
   getRef() {
    return firebaseApp.database().ref();
