@@ -18,27 +18,11 @@ export default class ChatView extends Component {
     super(props);
     var randomId = ''
 
-    var getdataValue = Promise.resolve(this.getData())
-                      .then(function(value) {
-                        console.log('the value from promise', value); // "Success"
-                        if (value !== null) {
-                          randomId = value
-                          console.log('the value of randomId from value', randomId);
-                        } else {
-                          console.log('NULL brah');
-                          randomId = {id: uuidv1()}
-                        }
-                      })
-    console.log('this is the randomId in object', randomId.id)
     this.state = {
       messages: [],
       inputBarText: '',
-      user: randomId.id
+      user: ''
     }
-    console.log('this is the state', this.state);
-    console.log('this is the state userid', this.state.user)
-    var userFirebaseChild = this.state.user
-    this.itemsRef = this.getRef().child('jofi/'+this.state.user);
   }
 
   async getData(){
@@ -111,7 +95,33 @@ export default class ChatView extends Component {
 
   //scroll to bottom when first showing the view
   componentDidMount() {
-    this.listenForItems(this.itemsRef);
+   Promise.resolve(this.getData())
+    .then((value) => {
+      console.log('the value from promise', value); // "Success"
+      if (value !== null) {
+        randomId = JSON.parse(value)
+        console.log('the value of randomId from value', randomId);
+        this.setState({
+          user: randomId.id
+        });
+        // var userFirebaseChild = JSON.parse(this.state.user).id
+        var userFirebaseChild = this.state.user
+        console.log('userFirebaseChild is', userFirebaseChild)
+        this.itemsRef = this.getRef().child('jofi/'+userFirebaseChild);
+        this.listenForItems(this.itemsRef);
+      } else {
+        console.log('NULL brah');
+        randomId = {id: uuidv1()}
+        this.setState({
+          user: randomId.id
+        });
+        var userFirebaseChild = this.state.user
+        console.log('userFirebaseChild is', userFirebaseChild)
+        this.itemsRef = this.getRef().child('jofi/'+userFirebaseChild);
+        this.listenForItems(randomId.id);
+      }
+    })
+    console.log('test the state', this.state)
     setTimeout(function() {
       this.scrollView.scrollToEnd();
     }.bind(this))
