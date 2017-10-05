@@ -1,44 +1,116 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, ScrollView, KeyboardAvoidingView, TextInput, TouchableHighlight, Keyboard } from 'react-native';
+import { Text, View, StyleSheet, AsyncStorage, ScrollView, KeyboardAvoidingView, TextInput, TouchableHighlight, Keyboard } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import AutogrowInput from 'react-native-autogrow-input';
+import * as firebase from 'firebase';
+import axios from 'axios';
+const uuidv1 = require('uuid/v1');
 
-//used to make random-sized messages
-function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+var firebaseConfig = {
+  databaseURL: 'https://ada-firebase.firebaseio.com',
+ projectId: 'ada-firebase'
 }
-
+const firebaseApp = firebase.initializeApp(firebaseConfig);
 // The actual chat view itself- a ScrollView of BubbleMessages, with an InputBar at the bottom, which moves with the keyboard
 export default class ChatView extends Component {
 
   constructor(props) {
     super(props);
-
-    var loremIpsum = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ac orci augue. Sed fringilla nec magna id hendrerit. Proin posuere, tortor ut dignissim consequat, ante nibh ultrices tellus, in facilisis nunc nibh rutrum nibh.';
-
-    //create a set number of texts with random lengths. Also randomly put them on the right (user) or left (other person).
-    var numberOfMessages = 20;
-
-    var messages = [];
-
-    for(var i = 0; i < numberOfMessages; i++) {
-      var messageLength = getRandomInt(10, 120);
-
-      var direction = getRandomInt(1, 2) === 1 ? 'right' : 'left';
-
-      message = loremIpsum.substring(0, messageLength);
-
-      messages.push({
-        direction: direction,
-        text: message
-      })
-    }
-
+    var randomId = {id: uuidv1()}
+    console.log('this is the randomId in object', randomId.id)
     this.state = {
-      messages: messages,
-      inputBarText: ''
+      messages: [],
+      inputBarText: '',
+      user: randomId.id
     }
+    console.log('this is the state', this.state);
+    AsyncStorage.setItem('userId', JSON.stringify(randomId), () => {
+      AsyncStorage.getItem('userId', (err, result) => {
+        console.log('the result from async', result);
+      });
+    });
+    console.log('this is the state userid', this.state.user)
+    var userFirebaseChild = this.state.user
+    this.itemsRef = this.getRef().child('jofi/'+this.state.user);
   }
+
+  // constructor(props) {
+  //   super(props);
+  //   var randomId = '123'
+  //   var value = Promise.resolve(this.getData())
+  //
+  //
+  //   // AsyncStorage.setItem('userId', randomId, () => {
+  //   //   // console.log('---result',result)
+  //   //   AsyncStorage.getItem('userId', (err, result) => {
+  //   //     console.log('the result from async', result);
+  //   //   });
+  //   // });
+  //
+  //   console.log('---- value',value)
+  //
+  //     if (value !== null){
+  //
+  //       randomId = value
+  //     } else {
+  //       randomId = {id: uuidv1()}
+  //       console.log('this is the randomId in object', randomId.id)
+  //
+  //     }
+  //
+  //   this.state = {
+  //     messages: [],
+  //     inputBarText: '',
+  //     user: randomId
+  //   }
+  //   console.log('this is the state', this.state);
+  //
+  //   console.log('this is the state userid', this.state.user)
+  //   var userFirebaseChild = this.state.user
+  //   this.itemsRef = this.getRef().child('jofi/'+this.state.user);
+  // }
+  //
+  // async getData(){
+  //   const userId = await AsyncStorage.getItem('userId');
+  //   console.log('user ID', userId)
+  //   return userId
+  // }
+
+  getRef() {
+   return firebaseApp.database().ref();
+  }
+
+  listenForItems(itemsRef) {
+    itemsRef.on('value', (snap) => {
+
+      // get children as an array
+      var items = [];
+      console.log('this is snap', snap)
+      snap.forEach((child) => {
+        var directionInput = ''
+        if (child.val().from == 'jofi') {
+          directionInput = 'left'
+        } else {
+          this.setState({
+            user: child.val().from
+          })
+          directionInput = 'right'
+        }
+        items.push({
+          from: child.val().from,
+          text: child.val().message.text,
+          key: child.key,
+          direction: directionInput
+        });
+      });
+      console.log('this is items', items)
+      this.setState({
+        messages: items
+      });
+
+    });
+  }
+
 
   static navigationOptions = {
     title: 'Chat',
@@ -68,6 +140,7 @@ export default class ChatView extends Component {
 
   //scroll to bottom when first showing the view
   componentDidMount() {
+    this.listenForItems(this.itemsRef);
     setTimeout(function() {
       this.scrollView.scrollToEnd();
     }.bind(this))
@@ -82,10 +155,23 @@ export default class ChatView extends Component {
   }
   // Decide bubbble to left or right
   _sendMessage() {
-    this.state.messages.push({direction: "left", text: this.state.inputBarText});
-
+    // this.state.messages.push({direction: "right", text: this.state.inputBarText});
+    console.log('for the axios', this.state.user)
+    axios.post(`https://4e307c98.ngrok.io/chatbot/${this.state.user}`, {
+      message: this.state.inputBarText
+    })
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+    AsyncStorage.getItem('userId', (err, result) => {
+      console.log('the result from async abis send', result);
+    });
+    // this.itemsRef.push({from: this.state.user, message: this.state.inputBarText})
+    this.listenForItems(this.itemsRef)
     this.setState({
-      messages: this.state.messages,
       inputBarText: ''
     });
   }
@@ -107,7 +193,6 @@ export default class ChatView extends Component {
   }
 
   render() {
-
     var messages = [];
 
     this.state.messages.forEach(function(message, index) {
@@ -134,7 +219,6 @@ export default class ChatView extends Component {
 //The bubbles that appear on the left or the right for the messages.
 class MessageBubble extends Component {
   render() {
-
     //These spacers make the message bubble stay to the left or the right, depending on who is speaking, even if the message is multiple lines.
     var leftSpacer = this.props.direction === 'left' ? null : <View style={{width: 70}}/>;
     var rightSpacer = this.props.direction === 'left' ? <View style={{width: 70}}/> : null;
@@ -171,16 +255,17 @@ class InputBar extends Component {
     }
   }
 
+
   render() {
     return (
           <View style={styles.inputBar}>
-            <AutogrowInput style={styles.textBox}
-                        ref={(ref) => { this.autogrowInput = ref }}
-                        multiline={true}
-                        defaultHeight={30}
-                        onChangeText={(text) => this.props.onChangeText(text)}
-                        onContentSizeChange={this.props.onSizeChange}
-                        value={this.props.text}/>
+          <AutogrowInput style={styles.textBox}
+                      ref={(ref) => { this.autogrowInput = ref }}
+                      multiline={true}
+                      defaultHeight={30}
+                      onChangeText={(text) => this.props.onChangeText(text)}
+                      onContentSizeChange={this.props.onSizeChange}
+                      value={this.props.text}/>
             <TouchableHighlight style={styles.sendButton} onPress={() => this.props.onSendPressed()}>
                 <Text style={{color: 'white'}}>Send</Text>
             </TouchableHighlight>
