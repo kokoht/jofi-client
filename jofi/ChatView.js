@@ -247,14 +247,14 @@ class InputBar extends Component {
     }
   }
 
-
+// multiline={true}
   render() {
     return (
           <View style={styles.inputBar}>
           <AutogrowInput style={styles.textBox}
                       ref={(ref) => { this.autogrowInput = ref }}
+                      defaultHeight={40}
                       multiline={true}
-                      defaultHeight={30}
                       onChangeText={(text) => this.props.onChangeText(text)}
                       onContentSizeChange={this.props.onSizeChange}
                       value={this.props.text}/>
