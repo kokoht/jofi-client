@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, AsyncStorage, ScrollView, KeyboardAvoidingView, TextInput, TouchableHighlight, Keyboard } from 'react-native';
+import { Text, View, FlatList, StyleSheet, AsyncStorage, Image, ScrollView, Button, KeyboardAvoidingView, TextInput, TouchableHighlight, Keyboard,  Dimensions} from 'react-native';
+import { Container, Header, DeckSwiper, Card, CardItem, Thumbnail, Left, Body, Icon } from 'native-base';
 // import KeyboardSpacer from 'react-native-keyboard-spacer';
 import AutogrowInput from 'react-native-autogrow-input';
 import * as firebase from 'firebase';
@@ -37,30 +38,32 @@ export default class ChatView extends Component {
 
   listenForItems(itemsRef) {
     console.log('e masuk listenForItems')
-    itemsRef.on('value', (snap) => {
+    var items = [...this.state.messages]
+    console.log('just make sure the firebase correct', items);
+    itemsRef.on('child_added', (snap) => {
 
       // get children as an array
-      var items = [];
+
       console.log('this is snap', snap)
-      snap.forEach((child) => {
-        var directionInput = ''
-        console.log('this is the child', child)
-        console.log('this is the childs value', child.val())
-        if (child.val().from == 'jofi') {
-          directionInput = 'left'
-        } else {
-          this.setState({
-            user: child.val().from
-          })
-          directionInput = 'right'
-        }
-        items.push({
-          from: child.val().from,
-          text: child.val().message.text,
-          key: child.key,
-          direction: directionInput
-        });
+      var directionInput = ''
+      // console.log('this is the child', child)
+      // console.log('this is the childs value', child.val())
+      if (snap.val().from == 'jofi') {
+        directionInput = 'left'
+      } else {
+        // this.setState({
+        //   user: snap.val().from
+        // })
+        directionInput = 'right'
+      }
+      items.push({
+        from: snap.val().from,
+        text: snap.val().message.text,
+        wholeMessage: snap.val().message,
+        key: snap.key,
+        direction: directionInput
       });
+
       console.log('this is items', items)
       this.setState({
         messages: items
@@ -132,6 +135,7 @@ export default class ChatView extends Component {
 
   //this is a bit sloppy: this is to make sure it scrolls to the bottom when a message is added, but
   //the component could update for other reasons, for which we wouldn't want it to scroll to the bottom.
+  //yoyo
   componentDidUpdate() {
     setTimeout(function() {
       this.scrollView.scrollToEnd();
@@ -178,25 +182,25 @@ export default class ChatView extends Component {
   // onSizeChange={() => this._onInputSizeChange()}
   render() {
     var messages = [];
-
+    const { navigate } = this.props.navigation
+    console.log('------------------------ooo', navigate);
+    // console.log('this state messages', this.state.messages);
     this.state.messages.forEach(function(message, index) {
-      messages.push(
+      if (typeof message.wholeMessage.job !== 'undefined') {
+        // console.log('this is the job------------', message.wholeMessage.job[0].title)
+        messages.push(
+          <MessageBubbleCarousel navigate={navigate} key={index} direction={message.direction} text='See the list here' listJobs={message.wholeMessage.job}/>
+        );
+
+      } else {
+        messages.push(
           <MessageBubble key={index} direction={message.direction} text={message.text}/>
         );
+      }
     });
 
-    // return (
-    //           <View style={styles.outer}>
-    //               <ScrollView ref={(ref) => { this.scrollView = ref }} style={styles.messages}>
-    //                 {messages}
-    //               </ScrollView>
-    //               <InputBar onSendPressed={() => this._sendMessage()}
-    //                         // onSizeChange={() => this._onInputSizeChange()}
-    //                         onChangeText={(text) => this._onChangeInputBarText(text)}
-    //                         text={this.state.inputBarText}/>
-    //               <KeyboardSpacer/>
-    //           </View>
-    //         );
+    console.log('this is it brah', messages);
+    console.log('this is it the message', this.state.messages);
 
     return (
               <View style={styles.outer}>
@@ -208,6 +212,31 @@ export default class ChatView extends Component {
                             text={this.state.inputBarText}/>
               </View>
             );
+  }
+}
+
+class MessageBubbleCarousel extends Component {
+  render() {
+    //These spacers make the message bubble stay to the left or the right, depending on who is speaking, even if the message is multiple lines.
+    var leftSpacer = this.props.direction === 'left' ? null : <View style={{width: 70}}/>;
+    var rightSpacer = this.props.direction === 'left' ? <View style={{width: 70}}/> : null;
+
+    var bubbleStyles = this.props.direction === 'left' ? [styles.messageBubble, styles.messageBubbleLeft] : [styles.messageBubble, styles.messageBubbleRight];
+
+    var bubbleTextStyle = this.props.direction === 'left' ? styles.messageBubbleTextLeft : styles.messageBubbleTextRight;
+    console.log('-----------wawaw', this.props);
+    return (
+        <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
+            {leftSpacer}
+            <View style={bubbleStyles}>
+              <Button
+                onPress={() => this.props.navigate('List', { jobs: this.props.listJobs})}
+                title={this.props.text}
+              />
+            </View>
+            {rightSpacer}
+          </View>
+      );
   }
 }
 
@@ -268,6 +297,8 @@ class InputBar extends Component {
           );
   }
 }
+
+
 
 //TODO: separate these out. This is what happens when you're in a hurry!
 const styles = StyleSheet.create({
