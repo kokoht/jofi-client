@@ -5,6 +5,7 @@ import AutogrowInput from 'react-native-autogrow-input';
 import * as firebase from 'firebase';
 import axios from 'axios';
 const uuidv1 = require('uuid/v1');
+import Siap from './Siap'
 
 var firebaseConfig = {
   databaseURL: 'https://ada-firebase.firebaseio.com',
@@ -200,10 +201,12 @@ export default class ChatView extends Component {
 
     return (
               <View style={styles.outer}>
-                  <ScrollView ref={(ref) => { this.scrollView = ref }} style={styles.messages}>
-                    {messages}
-                  </ScrollView>
-                  <InputBar onSendPressed={() => this._sendMessage()}
+
+                <ScrollView ref={(ref) => { this.scrollView = ref }} style={styles.messages}>
+                  {messages}
+                </ScrollView>
+                <Siap />
+                <InputBar onSendPressed={() => this._sendMessage()}
                             onChangeText={(text) => this._onChangeInputBarText(text)}
                             text={this.state.inputBarText}/>
               </View>
@@ -253,17 +256,20 @@ class InputBar extends Component {
 
   render() {
     return (
-          <View style={styles.inputBar}>
-          <AutogrowInput style={styles.textBox}
+          <View >
+            <View style={styles.inputBar}>
+              <AutogrowInput style={styles.textBox}
                       ref={(ref) => { this.autogrowInput = ref }}
                       multiline={true}
                       defaultHeight={40}
                       onChangeText={(text) => this.props.onChangeText(text)}
                       onContentSizeChange={this.props.onSizeChange}
                       value={this.props.text}/>
-            <TouchableHighlight style={styles.sendButton} onPress={() => this.props.onSendPressed()}>
-                <Text style={{color: 'white'}}>Send</Text>
-            </TouchableHighlight>
+
+              <TouchableHighlight style={styles.sendButton} onPress={() => this.props.onSendPressed()}>
+                  <Text style={{color: 'white'}}>Send</Text>
+              </TouchableHighlight>
+            </View>
           </View>
           );
   }
@@ -281,9 +287,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   },
 
-  messages: {
-    flex: 1
-  },
+
+
+  // swiperContainerButton: {
+  //   marginBottom: 100,
+  //   paddingBottom: 150
+  // },
+
+
 
   //InputBar
 

@@ -17,8 +17,14 @@ import {
 } from 'react-navigation';
 
 import ChatView from './ChatView'
+// import Menu from './Menu'
+// import Integrate from './Integrate'
+// import Siap from './Siap'
 
 const jofi = StackNavigator({
+  // Siap: {screen: Siap},
+  // Integrate: {screen: Integrate},
+  // Menu: {screen: Menu},
   Main: {screen: ChatView}
 });
 
@@ -60,5 +66,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
 });
+
+console.ignoredYellowBox = ['warning: View.protoTypes'];
 
 AppRegistry.registerComponent('jofi', () => jofi);

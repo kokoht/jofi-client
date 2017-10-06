@@ -1,8 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
 
 import React, { Component } from 'react';
 import {
@@ -12,24 +7,23 @@ import {
   View
 } from 'react-native';
 
-export default class jofi extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
-      </View>
-    );
-  }
-}
+import {
+  StackNavigator,
+} from 'react-navigation';
+
+import ChatView from './ChatView'
+// import Menu from './Menu'
+// import Integrate from './Integrate'
+// import Siap from './Siap'
+
+const jofi = StackNavigator({
+  // Siap: {screen: Siap},
+  // Integrate: {screen: Integrate},
+  // Menu: {screen: Menu},
+  Main: {screen: ChatView}
+});
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -49,5 +43,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
 });
+
+console.ignoredYellowBox = ['warning: View.protoTypes'];
 
 AppRegistry.registerComponent('jofi', () => jofi);
