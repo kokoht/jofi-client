@@ -63,18 +63,10 @@ const { height, width } = Dimensions.get('screen')
 
 const styles = StyleSheet.create({
 
-  wrapper: {
-    marginBottom: -10,
-    width: 150,
-    height: 960,
-    alignSelf: 'center'
-  },
-
   modal: {
     height: height/2,
     alignSelf: 'center',
     alignItems: 'center'
-
   },
 
   btn: {
@@ -82,14 +74,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#9b5d00",
     color: "white",
     padding: 10
-  },
-  btnModal: {
-    position: "absolute",
-    top: 0,
-    right: 0,
-    width: 50,
-    height: 50,
-    backgroundColor: "transparent"
   },
 
 
