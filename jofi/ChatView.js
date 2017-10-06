@@ -16,7 +16,7 @@ import Slider from 'react-native-slider';
 
 var firebaseConfig = {
   databaseURL: 'https://ada-firebase.firebaseio.com',
- projectId: 'ada-firebase'
+  projectId: 'ada-firebase'
 }
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 // The actual chat view itself- a ScrollView of BubbleMessages, with an InputBar at the bottom, which moves with the keyboard
@@ -36,10 +36,9 @@ export default class ChatView extends Component {
 // place for modalbox function
       isOpen: false,
       isDisabled: false,
-      swipeToClose: true
+      swipeToClose: true,
     }
   }
-
 
     onClose() {
       console.log('Modal just closed');
@@ -244,9 +243,9 @@ export default class ChatView extends Component {
   position='top'
   onClosingState={this.onClosingState}>
     <Text style={styles.textModal}>Swipe To Close </Text>
-  <Button onPress={() => this.refs.modal1.open()} style={styles.btnInsideModal}>      Modal Out       </Button>
-<Button onPress={() => this.refs.modal1.open()} style={styles.btnInsideModal}>      Modal Out       </Button>
-<Button onPress={() => this.refs.modal1.open()} style={styles.btnInsideModal}>      Modal Out       </Button>
+  <Button onPress={() => this.refs.modal1.close()} style={styles.btnInsideModal}>     Search Job by Location       </Button>
+<Button onPress={() => this.refs.modal1.close()} style={styles.btnInsideModal}>      Search Job by Expert      </Button>
+<Button onPress={() => this.refs.modal1.close()} style={styles.btnInsideModal}>      Kamu Siapa?       </Button>
 
 </Modal>
 
