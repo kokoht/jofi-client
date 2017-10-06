@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, AsyncStorage, ScrollView, KeyboardAvoidingView, TextInput, TouchableHighlight, Keyboard } from 'react-native';
-import KeyboardSpacer from 'react-native-keyboard-spacer';
+// import KeyboardSpacer from 'react-native-keyboard-spacer';
 import AutogrowInput from 'react-native-autogrow-input';
 import * as firebase from 'firebase';
 import axios from 'axios';
@@ -167,12 +167,12 @@ export default class ChatView extends Component {
   //We need to move the last message up if the input bar expands due to the user's new message exceeding the height of the box.
   //We really only need to do anything when the height of the InputBar changes, but AutogrowInput can't tell us that.
   //The real solution here is probably a fork of AutogrowInput that can provide this information.
-  _onInputSizeChange() {
-    setTimeout(function() {
-      this.scrollView.scrollToEnd({animated: false});
-    }.bind(this))
-  }
-
+  // _onInputSizeChange() {
+  //   setTimeout(function() {
+  //     this.scrollView.scrollToEnd({animated: false});
+  //   }.bind(this))
+  // }
+  // onSizeChange={() => this._onInputSizeChange()}
   render() {
     var messages = [];
 
@@ -182,16 +182,27 @@ export default class ChatView extends Component {
         );
     });
 
+    // return (
+    //           <View style={styles.outer}>
+    //               <ScrollView ref={(ref) => { this.scrollView = ref }} style={styles.messages}>
+    //                 {messages}
+    //               </ScrollView>
+    //               <InputBar onSendPressed={() => this._sendMessage()}
+    //                         // onSizeChange={() => this._onInputSizeChange()}
+    //                         onChangeText={(text) => this._onChangeInputBarText(text)}
+    //                         text={this.state.inputBarText}/>
+    //               <KeyboardSpacer/>
+    //           </View>
+    //         );
+
     return (
               <View style={styles.outer}>
                   <ScrollView ref={(ref) => { this.scrollView = ref }} style={styles.messages}>
                     {messages}
                   </ScrollView>
                   <InputBar onSendPressed={() => this._sendMessage()}
-                            onSizeChange={() => this._onInputSizeChange()}
                             onChangeText={(text) => this._onChangeInputBarText(text)}
                             text={this.state.inputBarText}/>
-                  <KeyboardSpacer/>
               </View>
             );
   }
