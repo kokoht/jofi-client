@@ -36,6 +36,7 @@ export default class ChatView extends Component {
   }
 
   listenForItems(itemsRef) {
+    console.log('e masuk listenForItems')
     itemsRef.on('value', (snap) => {
 
       // get children as an array
@@ -43,6 +44,8 @@ export default class ChatView extends Component {
       console.log('this is snap', snap)
       snap.forEach((child) => {
         var directionInput = ''
+        console.log('this is the child', child)
+        console.log('this is the childs value', child.val())
         if (child.val().from == 'jofi') {
           directionInput = 'left'
         } else {
