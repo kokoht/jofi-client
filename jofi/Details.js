@@ -1,7 +1,7 @@
 import React from 'react'
-import { View, Button, FlatList } from 'react-native'
+import { View, Button, FlatList, StyleSheet } from 'react-native'
 
-import { Text } from "react-native-elements";
+import { Text, Card } from "react-native-elements";
 
 // this is the place...
 
@@ -25,21 +25,71 @@ class Details extends React.Component {
     console.log('-----------------------');
     console.log('the navigation', this.props.navigation.state);
     const list = this.props.navigation.state.params.details
+    // <Text h2>{list["a10:updated"]}</Text>
+    // <Text h3>{list.description}</Text>
+    // <Text h5>{list.location}</Text>
+
+
+    // <Text h1>{list['a10:author']['a10:name']}</Text>
+
+    // link:
+    // <Text h5>{list.link}</Text>
+
     return (
-      <View>
-        <Text h1>{list['a10:author']['a10:name']}</Text>
-        <Text h2>{list["a10:updated"]}</Text>
-        <Text h3>{list.location}</Text>
-        <Text>{list.pubDate}</Text>
-          <FlatList
-            data={list.category}
-            renderItem={({item}) => <Text h4>{item}</Text>}
-          />
-      </View>
+      <Card>
+
+          <Card
+            containerStyle={
+              {backgroundColor: '#e8e8f9'}
+            }
+            >
+          <Text h5 style={styles.textDetail}>{list.title}</Text>
+          </Card>
+
+          <Card
+            containerStyle={
+              {backgroundColor: '#e8e8f9'}
+            }
+            >
+          <Text h5 style={styles.textDetail}>Published at:</Text>
+          <Text h5 style={styles.textDetail}>{list.pubDate}</Text>
+          </Card>
+
+
+
+
+
+        <Card
+          containerStyle={
+            {backgroundColor: '#e8e8f9'}
+          }
+          >
+        <Text h5 style={styles.textDetail}>Requirement:</Text>
+              <FlatList
+              data={list.category}
+              renderItem={({item}) => <Text h6 style={styles.textDetail}>{item}</Text>}
+            />
+        </Card>
+
+
+        <Button
+          icon={{name: 'code'}}
+          fontFamily='Lato'
+          buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0, marginTop: 50, backgroundColor: '#2D1E46'}}
+          title='SEND EMAIL' />
+
+      </Card>
     )
   }
 
 }
+
+const styles = StyleSheet.create({
+textDetail: {
+  color: 'black'
+}
+
+})
 
 
 // <FlatList
