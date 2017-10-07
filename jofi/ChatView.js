@@ -12,8 +12,6 @@ import MenuButton from 'react-native-button';
 import Modal from 'react-native-modalbox';
 import Slider from 'react-native-slider';
 
-
-
 var firebaseConfig = {
   databaseURL: 'https://ada-firebase.firebaseio.com',
  projectId: 'ada-firebase'
@@ -49,12 +47,6 @@ export default class ChatView extends Component {
       onClosingState(state) {
         console.log('the open/close of the swipeToClose just changed');
       }
-
-
-
-
-
-
 
   async getData(){
     const userId = await AsyncStorage.getItem('userId');
@@ -102,7 +94,6 @@ export default class ChatView extends Component {
     });
   }
 
-
   static navigationOptions = {
     title: 'Chat',
   };
@@ -145,22 +136,25 @@ export default class ChatView extends Component {
         console.log('userFirebaseChild is', userFirebaseChild)
         this.itemsRef = this.getRef().child('jofi/'+userFirebaseChild);
         this.listenForItems(this.itemsRef);
-      } else {
-        console.log('NULL brah');
-        randomId = {id: uuidv1()}
-        this.setState({
-          user: randomId.id
-        });
-        var userFirebaseChild = this.state.user
-        console.log('userFirebaseChild is', userFirebaseChild)
-        this.itemsRef = this.getRef().child('jofi/'+userFirebaseChild);
+        } else {
+         console.log('NULL brah');
+         randomId = {id: uuidv1()}
+         this.setState({
+           user: randomId.id
+         });
+         var userFirebaseChild = this.state.user
+         console.log('userFirebaseChild is', userFirebaseChild)
+         this.itemsRef = this.getRef().child('jofi/'+userFirebaseChild);
 
-        AsyncStorage.setItem('userId', {"id": `${randomId.id}`}, (err, result) => {
-          console.log('make sure setItem asyn bener', result);
-        });
-        this.listenForItems(randomId.id);
-      }
-    })
+         AsyncStorage.setItem('userId', JSON.stringify(randomId), (err, result) => {
+           console.log('make sure setItem asyn bener', result);
+         });
+         this.listenForItems(randomId.id);
+       }
+     })
+     .catch(error => {
+       console.log('error from promise get data()', error)
+     })
     console.log('test the state', this.state)
     setTimeout(function() {
       this.scrollView.scrollToEnd();
@@ -178,23 +172,26 @@ export default class ChatView extends Component {
   // Decide bubbble to left or right
   _sendMessage() {
     // this.state.messages.push({direction: "right", text: this.state.inputBarText});
-    console.log('for the axios', this.state.user)
-    axios.post(`https://4e307c98.ngrok.io/chatbot/${this.state.user}`, {
-      message: this.state.inputBarText
-    })
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-    this.listenForItems(this.itemsRef)
-    this.setState({
-      inputBarText: ''
-    });
+    if (this.state.inputBarText !== '') {
+      console.log('for the axios', this.state.user)
+      axios.post(`https://4e307c98.ngrok.io/chatbot/${this.state.user}`, {
+        message: this.state.inputBarText
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+      this.listenForItems(this.itemsRef)
+      this.setState({
+        inputBarText: ''
+      });
+    }
   }
 
   _setStateAndSend (input) {
+    console.log('the input to be send to axios', input);
     axios.post(`https://4e307c98.ngrok.io/chatbot/${this.state.user}`, {
       message: input
     })
@@ -232,7 +229,7 @@ export default class ChatView extends Component {
       if (typeof message.wholeMessage.job !== 'undefined') {
         // console.log('this is the job------------', message.wholeMessage.job[0].title)
         messages.push(
-          <MessageBubbleCarousel navigate={navigate} sendToDetails={() => this._setStateAndSend(input)} key={index} direction={message.direction} text={message.text} listJobs={message.wholeMessage.job}/>
+          <MessageBubbleCarousel navigate={navigate} key={index} direction={message.direction} text={message.text} listJobs={message.wholeMessage.job}/>
         );
 
       } else {
@@ -293,7 +290,7 @@ class MessageBubbleCarousel extends Component {
             <View style={bubbleStyles}>
               <Button
                 color="#8f77b7"
-                onPress={() => this.props.navigate('List', { jobs: this.props.listJobs, sendToDetails: this.props.sendToDetails })}
+                onPress={() => this.props.navigate('List', { jobs: this.props.listJobs })}
                 title='Berikut daftar pekerjaan yang kamu inginkan'
               />
             </View>
