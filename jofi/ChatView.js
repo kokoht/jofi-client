@@ -7,6 +7,13 @@ import * as firebase from 'firebase';
 import axios from 'axios';
 const uuidv1 = require('uuid/v1');
 
+
+import MenuButton from 'react-native-button';
+import Modal from 'react-native-modalbox';
+import Slider from 'react-native-slider';
+
+
+
 var firebaseConfig = {
   databaseURL: 'https://ada-firebase.firebaseio.com',
  projectId: 'ada-firebase'
@@ -22,9 +29,32 @@ export default class ChatView extends Component {
     this.state = {
       messages: [],
       inputBarText: '',
-      user: ''
+      user: '',
+
+      isOpen: false,
+     isDisabled: false,
+     swipeToClose: true
+
+
     }
   }
+
+//function modalbox / menu
+  onClose() {
+        console.log('Modal just closed');
+      }
+      onOpen() {
+        console.log('Modal just openned');
+      }
+      onClosingState(state) {
+        console.log('the open/close of the swipeToClose just changed');
+      }
+
+
+
+
+
+
 
   async getData(){
     const userId = await AsyncStorage.getItem('userId');
@@ -164,6 +194,19 @@ export default class ChatView extends Component {
     });
   }
 
+  _setStateAndSend (input) {
+    axios.post(`https://4e307c98.ngrok.io/chatbot/${this.state.user}`, {
+      message: input
+    })
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+    this.listenForItems(this.itemsRef)
+  }
+
   _onChangeInputBarText(text) {
     this.setState({
       inputBarText: text
@@ -207,6 +250,29 @@ export default class ChatView extends Component {
                   <ScrollView ref={(ref) => { this.scrollView = ref }} style={styles.messages}>
                     {messages}
                   </ScrollView>
+
+
+                  <MenuButton onPress={() => this.refs.modal1.open()} style={styles.btnModal}>Menu Bar</MenuButton>
+                  <Modal
+                    style={styles.modal}
+                    ref={"modal1"}
+                    swipeToClose={this.state.swipeToClose}
+                    onClosed={this.onClose}
+                    onOpened={this.onOpen}
+                    position='top'
+                    onClosingState={this.onClosingState}>
+                      <Text style={styles.textModal}>Swipe To Close </Text>
+                    <MenuButton onPress={() => this._setStateAndSend('mau cari kerja di kota')} style={styles.btnInsideModal}>     Find job by location      </MenuButton>
+                  <MenuButton onPress={() => this._setStateAndSend('mau cari kerja sesuai bidang')} style={styles.btnInsideModal}>      Find job by specialisation       </MenuButton>
+                  <MenuButton onPress={() => this._setStateAndSend('clear history')} style={styles.btnInsideModal}>      Clear history       </MenuButton>
+
+                  </Modal>
+
+
+
+
+
+
                   <InputBar onSendPressed={() => this._sendMessage()}
                             onChangeText={(text) => this._onChangeInputBarText(text)}
                             text={this.state.inputBarText}/>
@@ -372,4 +438,31 @@ const styles = StyleSheet.create({
   messageBubbleTextRight: {
     color: 'white'
   },
+
+
+
+  btnModal: {
+    margin: 10,
+    backgroundColor: "#9b5d00",
+    color: "white",
+    padding: 10
+  },
+  btnInsideModal: {
+    margin: 10,
+    backgroundColor: "#bef2b3",
+    color: "white",
+    padding: 10
+  },
+
+
+  textModal: {
+    color: "black",
+    fontSize: 22,
+    padding: 10,
+    alignSelf: 'center'
+  }
+
+
+
+
 })
