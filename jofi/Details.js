@@ -50,6 +50,7 @@ class Details extends React.Component {
           <Button
             icon={{name: 'code'}}
             fontFamily='Lato'
+            onPress={() => this.props.navigation.state.params.sendToDetails(list)}
             buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0, marginTop: 50, backgroundColor: '#2D1E46'}}
             title='SEND EMAIL' />
         </Card>

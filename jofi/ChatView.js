@@ -145,22 +145,25 @@ export default class ChatView extends Component {
         console.log('userFirebaseChild is', userFirebaseChild)
         this.itemsRef = this.getRef().child('jofi/'+userFirebaseChild);
         this.listenForItems(this.itemsRef);
-      } else {
-        console.log('NULL brah');
-        randomId = {id: uuidv1()}
-        this.setState({
-          user: randomId.id
-        });
-        var userFirebaseChild = this.state.user
-        console.log('userFirebaseChild is', userFirebaseChild)
-        this.itemsRef = this.getRef().child('jofi/'+userFirebaseChild);
+        } else {
+         console.log('NULL brah');
+         randomId = {id: uuidv1()}
+         this.setState({
+           user: randomId.id
+         });
+         var userFirebaseChild = this.state.user
+         console.log('userFirebaseChild is', userFirebaseChild)
+         this.itemsRef = this.getRef().child('jofi/'+userFirebaseChild);
 
-        AsyncStorage.setItem('userId', {"id": `${randomId.id}`}, (err, result) => {
-          console.log('make sure setItem asyn bener', result);
-        });
-        this.listenForItems(randomId.id);
-      }
-    })
+         AsyncStorage.setItem('userId', JSON.stringify(randomId), (err, result) => {
+           console.log('make sure setItem asyn bener', result);
+         });
+         this.listenForItems(randomId.id);
+       }
+     })
+     .catch(error => {
+       console.log('error from promise get data()', error)
+     })
     console.log('test the state', this.state)
     setTimeout(function() {
       this.scrollView.scrollToEnd();
@@ -195,6 +198,7 @@ export default class ChatView extends Component {
   }
 
   _setStateAndSend (input) {
+    console.log('the input to be send to axios', input);
     axios.post(`https://4e307c98.ngrok.io/chatbot/${this.state.user}`, {
       message: input
     })
