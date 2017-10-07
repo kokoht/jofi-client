@@ -3,6 +3,8 @@ import { View, Button, FlatList } from 'react-native'
 
 import { Text } from "react-native-elements";
 
+// this is the place...
+
 // <Button
 //   title="Open chat"
 //   onPress={() => props.navigation.navigate('Main')}
