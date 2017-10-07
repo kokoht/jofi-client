@@ -2,61 +2,17 @@ import React, { Component } from 'react'
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native'
 // import { connect } from 'react-redux'
 // import { setUsernameAction } from '../actions'
+import SplashScreen from 'react-native-splash-screen'
 
-export default class Welcome extends Component {
-  constructor(props){
-    super(props)
-    this.state = {
-      username: '',
-      password: ''
+export default class Splash extends Component {
+
+
+  componentDidMount() {
+    	// do stuff while splash screen is shown
+        // After having done stuff (such as async tasks) hide the splash screen
+        SplashScreen.hide();
     }
-  }
 
-  static navigationOptions = {
-    title: 'Jofi'
-  }
-
-  setUsername(data){
-    const { navigate } =this.props.navigation
-    // this.props.setUsername(data)
-    navigate('Main')
-  }
-
-  render() {
-    return (
-
-      <View style={styles.container}>
-        <Text> This is splash </Text>
-
-
-
-
-        <View style={styles.textInputContainer}>
-          <TextInput
-            placeholder="Input Your Username"
-            onChangeText={(username) => this.setState({username})}
-            value={this.state.username}
-            style={styles.inputPlace}
-          />
-
-
-          <TextInput
-            placeholder="Your Password"
-            onChangeText={(password) => this.setState({password})}
-            value={this.state.password}
-            style={styles.inputPlace}
-          />
-
-
-
-          <TouchableOpacity onPress={() => this.setUsername(this.state)} style={styles.buttonBox}>
-            <Text style={styles.buttonText}>FIND ME JOB</Text>
-          </TouchableOpacity>
-
-        </View>
-      </View>
-    )
-  }
 }
 
 
