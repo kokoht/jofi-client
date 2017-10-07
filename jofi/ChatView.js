@@ -194,6 +194,19 @@ export default class ChatView extends Component {
     });
   }
 
+  _setStateAndSend (input) {
+    axios.post(`https://4e307c98.ngrok.io/chatbot/${this.state.user}`, {
+      message: input
+    })
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+    this.listenForItems(this.itemsRef)
+  }
+
   _onChangeInputBarText(text) {
     this.setState({
       inputBarText: text
@@ -249,9 +262,9 @@ export default class ChatView extends Component {
                     position='top'
                     onClosingState={this.onClosingState}>
                       <Text style={styles.textModal}>Swipe To Close </Text>
-                    <MenuButton onPress={() => this.refs.modal1.close()} style={styles.btnInsideModal}>     Find job by location      </MenuButton>
-                  <MenuButton onPress={() => this.refs.modal1.open()} style={styles.btnInsideModal}>      Modal Out       </MenuButton>
-                  <MenuButton onPress={() => this.refs.modal1.open()} style={styles.btnInsideModal}>      Modal Out       </MenuButton>
+                    <MenuButton onPress={() => this._setStateAndSend('mau cari kerja di kota')} style={styles.btnInsideModal}>     Find job by location      </MenuButton>
+                  <MenuButton onPress={() => this._setStateAndSend('mau cari kerja sesuai bidang')} style={styles.btnInsideModal}>      Find job by specialisation       </MenuButton>
+                  <MenuButton onPress={() => this._setStateAndSend('clear history')} style={styles.btnInsideModal}>      Clear history       </MenuButton>
 
                   </Modal>
 
