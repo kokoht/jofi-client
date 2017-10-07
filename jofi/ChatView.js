@@ -236,7 +236,7 @@ export default class ChatView extends Component {
       if (typeof message.wholeMessage.job !== 'undefined') {
         // console.log('this is the job------------', message.wholeMessage.job[0].title)
         messages.push(
-          <MessageBubbleCarousel navigate={navigate} sendToDetails={() => this._setStateAndSend(input)} key={index} direction={message.direction} text={message.text} listJobs={message.wholeMessage.job}/>
+          <MessageBubbleCarousel navigate={navigate} key={index} direction={message.direction} text={message.text} listJobs={message.wholeMessage.job}/>
         );
 
       } else {
@@ -297,7 +297,7 @@ class MessageBubbleCarousel extends Component {
             <View style={bubbleStyles}>
               <Button
                 color="#8f77b7"
-                onPress={() => this.props.navigate('List', { jobs: this.props.listJobs, sendToDetails: this.props.sendToDetails })}
+                onPress={() => this.props.navigate('List', { jobs: this.props.listJobs })}
                 title='Berikut daftar pekerjaan yang kamu inginkan'
               />
             </View>

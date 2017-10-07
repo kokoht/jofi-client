@@ -33,7 +33,7 @@ class ListDemo extends React.Component {
               key={i}
               title={l.title}
               subtitle={l.title}
-              onPress={() => this.props.navigation.navigate('Details', { details: l, sendEmail: this.props.navigation.state.params.sendToDetails })}
+              onPress={() => this.props.navigation.navigate('Details', { details: l })}
             />
           ))
         }
