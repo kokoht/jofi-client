@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, Button, FlatList } from 'react-native'
+import { View, Text, Button, FlatList, ScrollView } from 'react-native'
 
 import { List, ListItem, Icon} from "react-native-elements";
 
@@ -24,7 +24,7 @@ class ListDemo extends React.Component {
     console.log('the navigation', this.props.navigation.state);
     const list = this.props.navigation.state.params.jobs
     return (
-      <View>
+      <ScrollView>
         <List>
           {
           list.map((l, i) => (
@@ -38,7 +38,7 @@ class ListDemo extends React.Component {
           ))
         }
         </List>
-      </View>
+       </ScrollView>
     )
   }
 
