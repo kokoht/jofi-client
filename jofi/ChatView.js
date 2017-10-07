@@ -232,7 +232,7 @@ export default class ChatView extends Component {
       if (typeof message.wholeMessage.job !== 'undefined') {
         // console.log('this is the job------------', message.wholeMessage.job[0].title)
         messages.push(
-          <MessageBubbleCarousel navigate={navigate} key={index} direction={message.direction} text='See the list here' listJobs={message.wholeMessage.job}/>
+          <MessageBubbleCarousel navigate={navigate} key={index} direction={message.direction} text={message.text} listJobs={message.wholeMessage.job}/>
         );
 
       } else {
@@ -261,7 +261,7 @@ export default class ChatView extends Component {
                     onOpened={this.onOpen}
                     position='top'
                     onClosingState={this.onClosingState}>
-                      <Text style={styles.textModal}>Swipe To Close </Text>
+                      <Text style={styles.textModal}>Swipe Down To Close </Text>
                     <MenuButton onPress={() => this._setStateAndSend('mau cari kerja di kota')} style={styles.btnInsideModal}>     Find job by location      </MenuButton>
                   <MenuButton onPress={() => this._setStateAndSend('mau cari kerja sesuai bidang')} style={styles.btnInsideModal}>      Find job by specialisation       </MenuButton>
                   <MenuButton onPress={() => this._setStateAndSend('clear history')} style={styles.btnInsideModal}>      Clear history       </MenuButton>
@@ -287,17 +287,22 @@ class MessageBubbleCarousel extends Component {
     var leftSpacer = this.props.direction === 'left' ? null : <View style={{width: 70}}/>;
     var rightSpacer = this.props.direction === 'left' ? <View style={{width: 70}}/> : null;
 
-    var bubbleStyles = this.props.direction === 'left' ? [styles.messageBubble, styles.messageBubbleLeft] : [styles.messageBubble, styles.messageBubbleRight];
+    var bubbleStyles = this.props.direction === 'left' ? [styles.messageBubble, styles.messageBubbleLeftList] : [styles.messageBubble, styles.messageBubbleRight];
 
     var bubbleTextStyle = this.props.direction === 'left' ? styles.messageBubbleTextLeft : styles.messageBubbleTextRight;
     console.log('-----------wawaw', this.props);
     return (
         <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
+          <Image
+            style={{width: 36, height: 36, borderRadius: 18, alignSelf: 'center'}}
+            source={require('./jofi.jpg')}
+          />
             {leftSpacer}
             <View style={bubbleStyles}>
               <Button
+                color="#8f77b7"
                 onPress={() => this.props.navigate('List', { jobs: this.props.listJobs})}
-                title={this.props.text}
+                title='Berikut daftar pekerjaan yang kamu inginkan'
               />
             </View>
             {rightSpacer}
@@ -319,6 +324,11 @@ class MessageBubble extends Component {
 
     return (
         <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
+          {this.props.direction === 'left' ?
+            <Image
+              style={{width: 36, height: 36, borderRadius: 18, alignSelf: 'center'}}
+              source={require('./jofi.jpg')}
+            /> : null}
             {leftSpacer}
             <View style={bubbleStyles}>
               <Text style={bubbleTextStyle}>
@@ -326,6 +336,11 @@ class MessageBubble extends Component {
               </Text>
             </View>
             {rightSpacer}
+            {this.props.direction === 'right' ?
+              <Image
+                style={{width: 36, height: 36, borderRadius: 18, alignSelf: 'center'}}
+                source={require('./me.jpg')}
+              /> : null}
           </View>
       );
   }
@@ -407,7 +422,8 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     paddingRight: 15,
     borderRadius: 5,
-    backgroundColor: '#66db30'
+    backgroundColor: '#6ED6C1'
+
   },
 
   //MessageBubble
@@ -426,13 +442,16 @@ const styles = StyleSheet.create({
   messageBubbleLeft: {
     backgroundColor: '#d5d8d4',
   },
+  messageBubbleLeftList: {
+    backgroundColor: '#8f77b7',
+  },
 
   messageBubbleTextLeft: {
     color: 'black'
   },
 
   messageBubbleRight: {
-    backgroundColor: '#66db30'
+    backgroundColor: '#6ED6C1'
   },
 
   messageBubbleTextRight: {
@@ -443,7 +462,7 @@ const styles = StyleSheet.create({
 
   btnModal: {
     margin: 10,
-    backgroundColor: "#9b5d00",
+    backgroundColor: "black",
     color: "white",
     padding: 10
   },
