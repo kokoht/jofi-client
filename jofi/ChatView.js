@@ -146,16 +146,17 @@ export default class ChatView extends Component {
         this.itemsRef = this.getRef().child('jofi/'+userFirebaseChild);
         this.listenForItems(this.itemsRef);
       } else {
+        console.log('NULL brah');
+        randomId = {id: uuidv1()}
+        this.setState({
+          user: randomId.id
+        });
+        var userFirebaseChild = this.state.user
+        console.log('userFirebaseChild is', userFirebaseChild)
+        this.itemsRef = this.getRef().child('jofi/'+userFirebaseChild);
+
         AsyncStorage.setItem('userId', randomId.id, (err, result) => {
           console.log('make sure setItem asyn bener', result);
-          console.log('NULL brah');
-          randomId = {id: uuidv1()}
-          this.setState({
-            user: randomId.id
-          });
-          var userFirebaseChild = this.state.user
-          console.log('userFirebaseChild is', userFirebaseChild)
-          this.itemsRef = this.getRef().child('jofi/'+userFirebaseChild);
         });
         this.listenForItems(randomId.id);
       }
@@ -187,10 +188,6 @@ export default class ChatView extends Component {
     .catch(function (error) {
       console.log(error);
     });
-    // AsyncStorage.getItem('userId', (err, result) => {
-    //   console.log('the result from async abis send', result);
-    // });
-    // this.itemsRef.push({from: this.state.user, message: this.state.inputBarText})
     this.listenForItems(this.itemsRef)
     this.setState({
       inputBarText: ''
