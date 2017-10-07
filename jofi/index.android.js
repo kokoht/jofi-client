@@ -16,17 +16,21 @@ import {
   StackNavigator,
 } from 'react-navigation';
 
+import Welcome from './Welcome'
 import ChatView from './ChatView'
 import List from './ListDemo'
 import Detail from './Details'
 
 
 const jofi = StackNavigator({
+  Welcome: {screen: Welcome},
   Main: {screen: ChatView},
   List: {screen: List},
   Details: {screen: Detail}
 
 });
+
+console.ignoredYellowBox = ['warning: View.protoTypes'];
 
 
 // export default class jofi extends Component {
