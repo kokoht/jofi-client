@@ -1,8 +1,15 @@
 import React from 'react'
 import { View, Button, FlatList, AsyncStorage, StyleSheet } from 'react-native'
-
+import { NavigationActions } from 'react-navigation'
 import { Text, Card } from "react-native-elements";
 import axios from 'axios';
+
+const resetAction = NavigationActions.reset({
+  index: 0,
+  actions: [
+    NavigationActions.navigate({ routeName: 'Main'})
+  ]
+})
 
 class Details extends React.Component {
 
@@ -39,7 +46,7 @@ class Details extends React.Component {
   _setStateAndSend (input) {
     console.log('the input to be send to axios', input);
     axios.post(`https://4e307c98.ngrok.io/chatbot/${this.state.user}`, {
-      message: 'Send choosen Job',
+      message: 'job_choosen',
       choosenJob: input,
       action: 'send_job'
     })
@@ -49,6 +56,7 @@ class Details extends React.Component {
     .catch(function (error) {
       console.log(error);
     });
+    this.props.navigation.dispatch(resetAction)
   }
   render() {
     console.log('-----------------------');

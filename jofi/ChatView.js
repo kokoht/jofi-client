@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Text, View, FlatList, StyleSheet, AsyncStorage, Image, ScrollView, Button, KeyboardAvoidingView, TextInput, TouchableHighlight, Keyboard,  Dimensions} from 'react-native';
-import { Container, Header, DeckSwiper, Card, CardItem, Thumbnail, Left, Body, Icon } from 'native-base';
+// import { Container, Header, DeckSwiper, Card, CardItem, Thumbnail, Left, Body, Icon } from 'native-base';
 // import KeyboardSpacer from 'react-native-keyboard-spacer';
 import AutogrowInput from 'react-native-autogrow-input';
 import * as firebase from 'firebase';
@@ -28,6 +28,9 @@ export default class ChatView extends Component {
       messages: [],
       inputBarText: '',
       user: '',
+      latitude: null,
+      longitude: null,
+      error: null,
 
       isOpen: false,
      isDisabled: false,
@@ -70,6 +73,9 @@ export default class ChatView extends Component {
       var directionInput = ''
       // console.log('this is the child', child)
       // console.log('this is the childs value', child.val())
+
+
+
       if (snap.val().from == 'jofi') {
         directionInput = 'left'
       } else {
@@ -78,19 +84,48 @@ export default class ChatView extends Component {
         // })
         directionInput = 'right'
       }
-      items.push({
-        from: snap.val().from,
-        text: snap.val().message.text,
-        wholeMessage: snap.val().message,
-        key: snap.key,
-        direction: directionInput
-      });
-
-      console.log('this is items', items)
-      this.setState({
-        messages: items
-      });
-
+      // (typeof message.wholeMessage.job !== 'undefined')
+      if (typeof snap.val().message.action !== 'undefined') {
+        // console.log('-------------------------snap.val().message.action.type', snap.val().message.action.type);
+        if (snap.val().message.action.type == 'clear_history') {
+          items = []
+          items.push({
+            from: snap.val().from,
+            text: snap.val().message.text,
+            wholeMessage: snap.val().message,
+            key: snap.key,
+            direction: directionInput
+          });
+          console.log('this is items', items)
+          this.setState({
+            messages: items
+          });
+        } else {
+          items.push({
+            from: snap.val().from,
+            text: snap.val().message.text,
+            wholeMessage: snap.val().message,
+            key: snap.key,
+            direction: directionInput
+          });
+          console.log('this is items', items)
+          this.setState({
+            messages: items
+          });
+        }
+      } else {
+        items.push({
+          from: snap.val().from,
+          text: snap.val().message.text,
+          wholeMessage: snap.val().message,
+          key: snap.key,
+          direction: directionInput
+        });
+        console.log('this is items', items)
+        this.setState({
+          messages: items
+        });
+      }
     });
   }
 
@@ -156,19 +191,19 @@ export default class ChatView extends Component {
        console.log('error from promise get data()', error)
      })
     console.log('test the state', this.state)
-    setTimeout(function() {
-      this.scrollView.scrollToEnd();
-    }.bind(this))
+    // setTimeout(function() {
+    //   this.scrollView.scrollToEnd();
+    // }.bind(this))
   }
 
   //this is a bit sloppy: this is to make sure it scrolls to the bottom when a message is added, but
   //the component could update for other reasons, for which we wouldn't want it to scroll to the bottom.
   //yoyo
-  componentDidUpdate() {
-    setTimeout(function() {
-      this.scrollView.scrollToEnd();
-    }.bind(this))
-  }
+  // componentDidUpdate() {
+  //   setTimeout(function() {
+  //     this.scrollView.scrollToEnd();
+  //   }.bind(this))
+  // }
   // Decide bubbble to left or right
   _sendMessage() {
     // this.state.messages.push({direction: "right", text: this.state.inputBarText});
@@ -183,7 +218,7 @@ export default class ChatView extends Component {
       .catch(function (error) {
         console.log(error);
       });
-      this.listenForItems(this.itemsRef)
+      // this.listenForItems(this.itemsRef)
       this.setState({
         inputBarText: ''
       });
@@ -201,7 +236,43 @@ export default class ChatView extends Component {
     .catch(function (error) {
       console.log(error);
     });
-    this.listenForItems(this.itemsRef)
+    // this.listenForItems(this.itemsRef)
+  }
+
+  _sendLocation (input) {
+    navigator.geolocation.getCurrentPosition(
+     (position) => {
+       this.setState({
+         latitude: position.coords.latitude,
+         longitude: position.coords.longitude,
+         error: null,
+       });
+       console.log('----------------the lat--------------', position.coords.latitude);
+       console.log('----------------the long--------------', position.coords.latitude);
+
+       console.log('----------------THIS IS THE STATE BEFORE SEND LOCATION---------------', this.state);
+
+       axios.post(`https://4e307c98.ngrok.io/chatbot/${this.state.user}`, {
+         action: 'get_job_by_location',
+         message: input,
+         location: {
+           latitude: this.state.latitude,
+           longitude: this.state.longitude,
+           error: this.state.error
+         }
+       })
+       .then(function (response) {
+         console.log('ini response yang ok -------------', response);
+       })
+       .catch(function (err) {
+         console.log('ini response yang err -------------', err);
+       });
+     },
+     (error) => this.setState({ error: error.message }),
+     { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 },
+   );
+   console.log('the input to be send to axios', input);
+
   }
 
   _onChangeInputBarText(text) {
@@ -239,14 +310,28 @@ export default class ChatView extends Component {
       }
     });
 
+    // <ScrollView ref={(ref) => { this.scrollView = ref }} style={styles.messages}>
+    //   {messages}
+    // </ScrollView>
+
+
     console.log('this is it brah', messages);
     console.log('this is it the message', this.state.messages);
 
     return (
               <View style={styles.outer}>
-                  <ScrollView ref={(ref) => { this.scrollView = ref }} style={styles.messages}>
+
+                <ScrollView
+                    ref={ref => this.scrollView = ref}
+                    style={styles.messages}
+                    onContentSizeChange={(contentWidth, contentHeight)=>{
+                        this.scrollView.scrollToEnd({animated: true});
+                    }}>
+
                     {messages}
-                  </ScrollView>
+
+                </ScrollView>
+
                   <MenuButton onPress={() => this.refs.modal1.open()} style={styles.btnModal}>Menu Bar</MenuButton>
                   <Modal
                     style={styles.modal}
@@ -257,6 +342,7 @@ export default class ChatView extends Component {
                     position='top'
                     onClosingState={this.onClosingState}>
                       <Text style={styles.textModal}>Swipe Down To Close </Text>
+                      <MenuButton onPress={() => this._sendLocation('send location')} style={styles.btnInsideModal}>     Send location to find jobs nearby   </MenuButton>
                     <MenuButton onPress={() => this._setStateAndSend('mau cari kerja di kota')} style={styles.btnInsideModal}>     Find job by location      </MenuButton>
                   <MenuButton onPress={() => this._setStateAndSend('mau cari kerja sesuai bidang')} style={styles.btnInsideModal}>      Find job by specialisation       </MenuButton>
                   <MenuButton onPress={() => this._setStateAndSend('clear history')} style={styles.btnInsideModal}>      Clear history       </MenuButton>
@@ -370,6 +456,14 @@ class InputBar extends Component {
 
 
 
+// <ScrollView
+//     ref={ref => this.scrollView = ref}
+//     onContentSizeChange={(contentWidth, contentHeight)=>{
+//         this.scrollView.scrollToEnd({animated: true});
+//     style={styles.messages}
+//     }}>
+//     {messages}
+// </ScrollView>
 //TODO: separate these out. This is what happens when you're in a hurry!
 const styles = StyleSheet.create({
 
