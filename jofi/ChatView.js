@@ -19,6 +19,8 @@ var firebaseConfig = {
 }
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 // The actual chat view itself- a ScrollView of BubbleMessages, with an InputBar at the bottom, which moves with the keyboard
+const urlServer = 'http://d1a1b7eb.ngrok.io/chatbot'
+
 export default class ChatView extends Component {
 
   constructor(props) {
@@ -210,7 +212,7 @@ export default class ChatView extends Component {
     // this.state.messages.push({direction: "right", text: this.state.inputBarText});
     if (this.state.inputBarText !== '') {
       console.log('for the axios', this.state.user)
-      axios.post(`https://4e307c98.ngrok.io/chatbot/${this.state.user}`, {
+      axios.post(`${urlServer}/${this.state.user}`, {
         message: this.state.inputBarText
       })
       .then(function (response) {
@@ -228,7 +230,7 @@ export default class ChatView extends Component {
 
   _setStateAndSend (input) {
     console.log('the input to be send to axios', input);
-    axios.post(`https://4e307c98.ngrok.io/chatbot/${this.state.user}`, {
+    axios.post(`${urlServer}/${this.state.user}`, {
       message: input
     })
     .then(function (response) {
@@ -237,6 +239,7 @@ export default class ChatView extends Component {
     .catch(function (error) {
       console.log(error);
     });
+    this.refs.modal1.close()
     // this.listenForItems(this.itemsRef)
   }
 
@@ -249,11 +252,11 @@ export default class ChatView extends Component {
          error: null,
        });
        console.log('----------------the lat--------------', position.coords.latitude);
-       console.log('----------------the long--------------', position.coords.latitude);
+       console.log('----------------the long--------------', position.coords.longitude);
 
        console.log('----------------THIS IS THE STATE BEFORE SEND LOCATION---------------', this.state);
 
-       axios.post(`https://4e307c98.ngrok.io/chatbot/${this.state.user}`, {
+       axios.post(`${urlServer}/${this.state.user}`, {
          action: 'get_job_by_location',
          message: input,
          location: {
@@ -269,14 +272,8 @@ export default class ChatView extends Component {
          console.log('ini response yang err -------------',err);
        });
      },
-     (error) => {
-       this.setState({ error: error.message })
-        Alert.alert(
-        'Opps! Sorry, we are confused to find your location',
-        `Please share your location again: ${error.message}`
-        )
-    },
-     { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 },
+     (error) => this.setState({ error: error.message }),
+     { enableHighAccuracy: false, timeout: 50000, maximumAge: 1000 },
    );
    console.log('the input to be send to axios', input);
 
