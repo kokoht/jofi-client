@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, FlatList, AsyncStorage, StyleSheet, Button, Text} from 'react-native'
+import { View, FlatList, AsyncStorage, StyleSheet, Button, Text, ScrollView, Linking} from 'react-native'
 import { NavigationActions} from 'react-navigation'
 import { Card } from "react-native-elements";
 import axios from 'axios';
@@ -63,7 +63,10 @@ class Details extends React.Component {
     console.log('-----------------------');
     console.log('the navigation', this.props.navigation.state);
     const list = this.props.navigation.state.params.details
+    const firstFiltered = list.description.replace(/&lt;|p&gt|a&gt|&gt|br|li|ul|ul;|;/gi, "")
+    var lastFiltered = firstFiltered.replace(/\//g, "");
     return (
+      <ScrollView>
       <Card>
 
           <Card
@@ -107,8 +110,30 @@ class Details extends React.Component {
             title='SEND EMAIL' />
         </Card>
 
+        <Card
+          containerStyle={
+            {backgroundColor: '#e8e8f9'}
+          }
+          >
+          <Text style={{color: 'blue'}}
+                onPress={() => Linking.openURL(list.link)}>
+            See the job source
+          </Text>
+        </Card>
+
+        <Card
+          containerStyle={
+            {backgroundColor: '#2D1E46'}
+          }
+          >
+
+          <Text style={styles.details}>Rough Description:</Text>
+          <Text style={styles.details}>{lastFiltered}</Text>
+        </Card>
+
 
       </Card>
+      </ScrollView>
 
     )
   }

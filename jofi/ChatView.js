@@ -133,7 +133,7 @@ export default class ChatView extends Component {
   }
 
   static navigationOptions = {
-    title: 'Chat',
+    title: 'Jofi',
   };
 
   //fun keyboard stuff- we use these to get the end of the ScrollView to "follow" the top of the InputBar as the keyboard rises and falls
