@@ -70,6 +70,9 @@ export default class ChatView extends Component {
       var directionInput = ''
       // console.log('this is the child', child)
       // console.log('this is the childs value', child.val())
+
+
+
       if (snap.val().from == 'jofi') {
         directionInput = 'left'
       } else {
@@ -78,19 +81,36 @@ export default class ChatView extends Component {
         // })
         directionInput = 'right'
       }
-      items.push({
-        from: snap.val().from,
-        text: snap.val().message.text,
-        wholeMessage: snap.val().message,
-        key: snap.key,
-        direction: directionInput
-      });
-
-      console.log('this is items', items)
-      this.setState({
-        messages: items
-      });
-
+      // (typeof message.wholeMessage.job !== 'undefined')
+      if (typeof snap.val().message.action !== 'undefined') {
+        // console.log('-------------------------snap.val().message.action.type', snap.val().message.action.type);
+        if (snap.val().message.action.type == 'clear_history') {
+          items = []
+          items.push({
+            from: snap.val().from,
+            text: snap.val().message.text,
+            wholeMessage: snap.val().message,
+            key: snap.key,
+            direction: directionInput
+          });
+          console.log('this is items', items)
+          this.setState({
+            messages: items
+          });
+        }
+      } else {
+        items.push({
+          from: snap.val().from,
+          text: snap.val().message.text,
+          wholeMessage: snap.val().message,
+          key: snap.key,
+          direction: directionInput
+        });
+        console.log('this is items', items)
+        this.setState({
+          messages: items
+        });
+      }
     });
   }
 
@@ -156,19 +176,19 @@ export default class ChatView extends Component {
        console.log('error from promise get data()', error)
      })
     console.log('test the state', this.state)
-    setTimeout(function() {
-      this.scrollView.scrollToEnd();
-    }.bind(this))
+    // setTimeout(function() {
+    //   this.scrollView.scrollToEnd();
+    // }.bind(this))
   }
 
   //this is a bit sloppy: this is to make sure it scrolls to the bottom when a message is added, but
   //the component could update for other reasons, for which we wouldn't want it to scroll to the bottom.
   //yoyo
-  componentDidUpdate() {
-    setTimeout(function() {
-      this.scrollView.scrollToEnd();
-    }.bind(this))
-  }
+  // componentDidUpdate() {
+  //   setTimeout(function() {
+  //     this.scrollView.scrollToEnd();
+  //   }.bind(this))
+  // }
   // Decide bubbble to left or right
   _sendMessage() {
     // this.state.messages.push({direction: "right", text: this.state.inputBarText});
@@ -239,14 +259,28 @@ export default class ChatView extends Component {
       }
     });
 
+    // <ScrollView ref={(ref) => { this.scrollView = ref }} style={styles.messages}>
+    //   {messages}
+    // </ScrollView>
+
+
     console.log('this is it brah', messages);
     console.log('this is it the message', this.state.messages);
 
     return (
               <View style={styles.outer}>
-                  <ScrollView ref={(ref) => { this.scrollView = ref }} style={styles.messages}>
+
+                <ScrollView
+                    ref={ref => this.scrollView = ref}
+                    style={styles.messages}
+                    onContentSizeChange={(contentWidth, contentHeight)=>{
+                        this.scrollView.scrollToEnd({animated: true});
+                    }}>
+
                     {messages}
-                  </ScrollView>
+
+                </ScrollView>
+
                   <MenuButton onPress={() => this.refs.modal1.open()} style={styles.btnModal}>Menu Bar</MenuButton>
                   <Modal
                     style={styles.modal}
@@ -370,6 +404,14 @@ class InputBar extends Component {
 
 
 
+// <ScrollView
+//     ref={ref => this.scrollView = ref}
+//     onContentSizeChange={(contentWidth, contentHeight)=>{
+//         this.scrollView.scrollToEnd({animated: true});
+//     style={styles.messages}
+//     }}>
+//     {messages}
+// </ScrollView>
 //TODO: separate these out. This is what happens when you're in a hurry!
 const styles = StyleSheet.create({
 
