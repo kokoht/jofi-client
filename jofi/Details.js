@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, FlatList, AsyncStorage, StyleSheet, Text} from 'react-native'
-import { NavigationActions, Button } from 'react-navigation'
+import { View, FlatList, AsyncStorage, StyleSheet, Button, Text} from 'react-native'
+import { NavigationActions} from 'react-navigation'
 import { Card } from "react-native-elements";
 import axios from 'axios';
 
@@ -78,7 +78,7 @@ class Details extends React.Component {
               {backgroundColor: '#2D1E46'}
             }
             >
-            <Text style={styles.details}>Located at {list.location}</Text>
+
             <Text style={styles.details}>Published on {list.pubDate}</Text>
           </Card>
 
@@ -108,6 +108,7 @@ class Details extends React.Component {
 
 
       </Card>
+
     )
   }
 
@@ -142,3 +143,5 @@ details:{
 })
 
 export default Details
+
+//
