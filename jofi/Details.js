@@ -3,6 +3,7 @@ import { View, FlatList, AsyncStorage, StyleSheet, Button, Text} from 'react-nat
 import { NavigationActions} from 'react-navigation'
 import { Card } from "react-native-elements";
 import axios from 'axios';
+const urlServer = 'http://d1a1b7eb.ngrok.io/chatbot'
 
 const resetAction = NavigationActions.reset({
   index: 0,
@@ -45,7 +46,7 @@ class Details extends React.Component {
 
   _setStateAndSend (input) {
     console.log('the input to be send to axios', input);
-    axios.post(`https://4e307c98.ngrok.io/chatbot/${this.state.user}`, {
+    axios.post(`${urlServer}/${this.state.user}`, {
       message: 'job_choosen',
       choosenJob: input,
       action: 'send_job'
@@ -78,7 +79,7 @@ class Details extends React.Component {
               {backgroundColor: '#2D1E46'}
             }
             >
-
+            <Text style={styles.details}>Located at {list.location}</Text>
             <Text style={styles.details}>Published on {list.pubDate}</Text>
           </Card>
 
