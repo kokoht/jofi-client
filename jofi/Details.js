@@ -1,7 +1,7 @@
 import React from 'react'
-import { View, Button, FlatList, AsyncStorage, StyleSheet } from 'react-native'
-import { NavigationActions } from 'react-navigation'
-import { Text, Card } from "react-native-elements";
+import { View, FlatList, AsyncStorage, StyleSheet, Text} from 'react-native'
+import { NavigationActions, Button } from 'react-navigation'
+import { Card } from "react-native-elements";
 import axios from 'axios';
 
 const resetAction = NavigationActions.reset({
@@ -67,30 +67,30 @@ class Details extends React.Component {
 
           <Card
             containerStyle={
-              {backgroundColor: '#e8e8f9'}
+              {backgroundColor: 'white'}
             }
             >
-          <Text h5 style={styles.textDetail}>{list.title}</Text>
+          <Text style={styles.title}>{list.title}</Text>
           </Card>
 
           <Card
             containerStyle={
-              {backgroundColor: '#e8e8f9'}
+              {backgroundColor: '#2D1E46'}
             }
             >
-          <Text h5 style={styles.textDetail}>Published at:</Text>
-          <Text h5 style={styles.textDetail}>{list.pubDate}</Text>
+            <Text style={styles.details}>Located at {list.location}</Text>
+            <Text style={styles.details}>Published on {list.pubDate}</Text>
           </Card>
 
         <Card
           containerStyle={
-            {backgroundColor: '#e8e8f9'}
+            {backgroundColor: '#8f77b7'}
           }
           >
-        <Text h5 style={styles.textDetail}>Requirement:</Text>
+        <Text style={styles.textDetailTitle}>Requirement:</Text>
               <FlatList
               data={list.category}
-              renderItem={({item}) => <Text h6 style={styles.textDetail}>{item}</Text>}
+              renderItem={({item}) => <Text style={styles.textDetail}>{item}</Text>}
             />
         </Card>
 
@@ -100,10 +100,9 @@ class Details extends React.Component {
           }
           >
           <Button
-            icon={{name: 'code'}}
             fontFamily='Lato'
             onPress={() => this._setStateAndSend(list)}
-            buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0, marginTop: 50, backgroundColor: '#2D1E46'}}
+            buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0, marginTop: 50, backgroundColor: '#6ED6C1'}}
             title='SEND EMAIL' />
         </Card>
 
@@ -116,7 +115,28 @@ class Details extends React.Component {
 
 const styles = StyleSheet.create({
 textDetail: {
-  color: 'black'
+  color: 'white',
+  fontFamily: 'Roboto',
+  fontSize: 10,
+  textAlign: 'left'
+},
+textDetailTitle: {
+  color: 'white',
+  fontFamily: 'Roboto',
+  fontSize: 12,
+  textAlign: 'center'
+},
+title: {
+  color: 'black',
+  fontFamily: 'Roboto',
+  fontSize: 20,
+  textAlign: 'center'
+},
+details:{
+  color: 'white',
+  fontFamily: 'Roboto',
+  fontSize: 10,
+  textAlign: 'center'
 }
 
 })

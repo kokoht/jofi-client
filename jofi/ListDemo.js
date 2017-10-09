@@ -32,7 +32,7 @@ class ListDemo extends React.Component {
               roundAvatar
               key={i}
               title={l.title}
-              subtitle={l.title}
+              subtitle={l.location}
               onPress={() => this.props.navigation.navigate('Details', { details: l })}
             />
           ))

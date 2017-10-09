@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Text, View, FlatList, StyleSheet, AsyncStorage, Image, ScrollView, Button, KeyboardAvoidingView, TextInput, TouchableHighlight, Keyboard,  Dimensions} from 'react-native';
+import { Alert, Text, View, FlatList, StyleSheet, AsyncStorage, Image, ScrollView, Button, KeyboardAvoidingView, TextInput, TouchableHighlight, Keyboard,  Dimensions} from 'react-native';
 // import { Container, Header, DeckSwiper, Card, CardItem, Thumbnail, Left, Body, Icon } from 'native-base';
 // import KeyboardSpacer from 'react-native-keyboard-spacer';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import AutogrowInput from 'react-native-autogrow-input';
 import * as firebase from 'firebase';
 import axios from 'axios';
@@ -265,10 +266,16 @@ export default class ChatView extends Component {
          console.log('ini response yang ok -------------', response);
        })
        .catch(function (err) {
-         console.log('ini response yang err -------------', err);
+         console.log('ini response yang err -------------',err);
        });
      },
-     (error) => this.setState({ error: error.message }),
+     (error) => {
+       this.setState({ error: error.message })
+        Alert.alert(
+        'Opps! Sorry, we are confused to find your location',
+        `Please share your location again: ${error.message}`
+        )
+    },
      { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 },
    );
    console.log('the input to be send to axios', input);
@@ -331,8 +338,9 @@ export default class ChatView extends Component {
                     {messages}
 
                 </ScrollView>
-
-                  <MenuButton onPress={() => this.refs.modal1.open()} style={styles.btnModal}>Menu Bar</MenuButton>
+                  <MenuButton onPress={() => this.refs.modal1.open()} style={styles.btnModal}>
+                    <Icon name="chevron-up" size={30} color="black" style={{alignSelf: 'center'}}/>
+                  </MenuButton>
                   <Modal
                     style={styles.modal}
                     ref={"modal1"}
@@ -341,7 +349,7 @@ export default class ChatView extends Component {
                     onOpened={this.onOpen}
                     position='top'
                     onClosingState={this.onClosingState}>
-                      <Text style={styles.textModal}>Swipe Down To Close </Text>
+                      <Icon name="chevron-down" size={40} color="black" style={styles.textModal} onPress={() => this.refs.modal1.close()}/>
                       <MenuButton onPress={() => this._sendLocation('send location')} style={styles.btnInsideModal}>     Send location to find jobs nearby   </MenuButton>
                     <MenuButton onPress={() => this._setStateAndSend('mau cari kerja di kota')} style={styles.btnInsideModal}>     Find job by location      </MenuButton>
                   <MenuButton onPress={() => this._setStateAndSend('mau cari kerja sesuai bidang')} style={styles.btnInsideModal}>      Find job by specialisation       </MenuButton>
@@ -546,12 +554,12 @@ const styles = StyleSheet.create({
   btnModal: {
     margin: 10,
     backgroundColor: "black",
-    color: "white",
+    color: "black",
     padding: 10
   },
   btnInsideModal: {
     margin: 10,
-    backgroundColor: "#bef2b3",
+    backgroundColor: "#8f77b7",
     color: "white",
     padding: 10
   },
@@ -559,7 +567,7 @@ const styles = StyleSheet.create({
 
   textModal: {
     color: "black",
-    fontSize: 22,
+    fontSize: 35,
     padding: 10,
     alignSelf: 'center'
   }
