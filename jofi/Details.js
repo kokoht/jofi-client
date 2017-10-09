@@ -81,7 +81,6 @@ class Details extends React.Component {
           <Text h5 style={styles.textDetail}>Published at:</Text>
           <Text h5 style={styles.textDetail}>{list.pubDate}</Text>
           </Card>
-
         <Card
           containerStyle={
             {backgroundColor: '#e8e8f9'}
@@ -93,7 +92,6 @@ class Details extends React.Component {
               renderItem={({item}) => <Text h6 style={styles.textDetail}>{item}</Text>}
             />
         </Card>
-
         <Card
           containerStyle={
             {backgroundColor: '#e8e8f9'}
@@ -106,8 +104,6 @@ class Details extends React.Component {
             buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0, marginTop: 50, backgroundColor: '#2D1E46'}}
             title='SEND EMAIL' />
         </Card>
-
-
       </Card>
     )
   }
