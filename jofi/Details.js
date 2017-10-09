@@ -46,7 +46,7 @@ class Details extends React.Component {
   _setStateAndSend (input) {
     console.log('the input to be send to axios', input);
     axios.post(`https://4e307c98.ngrok.io/chatbot/${this.state.user}`, {
-      message: 'Send choosen Job',
+      message: 'job_choosen',
       choosenJob: input,
       action: 'send_job'
     })
