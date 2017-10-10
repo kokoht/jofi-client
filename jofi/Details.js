@@ -3,7 +3,7 @@ import { View, FlatList, AsyncStorage, StyleSheet, Button, Text} from 'react-nat
 import { NavigationActions} from 'react-navigation'
 import { Card } from "react-native-elements";
 import axios from 'axios';
-const urlServer = 'http://d1a1b7eb.ngrok.io/chatbot'
+const urlServer = 'https://97ed7407.ngrok.io/chatbot'
 
 const resetAction = NavigationActions.reset({
   index: 0,
@@ -22,6 +22,10 @@ class Details extends React.Component {
       user: ''
     }
   }
+
+    static navigationOptions = {
+      title: 'Jofi',
+    };
 
   componentDidMount() {
    Promise.resolve(this.getData())
@@ -118,26 +122,26 @@ class Details extends React.Component {
 const styles = StyleSheet.create({
 textDetail: {
   color: 'white',
-  fontFamily: 'Roboto',
-  fontSize: 10,
-  textAlign: 'left'
+  // fontFamily: 'Roboto',
+  fontSize: 12,
+  textAlign: 'center'
 },
 textDetailTitle: {
   color: 'white',
-  fontFamily: 'Roboto',
-  fontSize: 12,
+  // fontFamily: 'Roboto',
+  fontSize: 13,
   textAlign: 'center'
 },
 title: {
   color: 'black',
-  fontFamily: 'Roboto',
+  // fontFamily: 'Roboto',
   fontSize: 20,
   textAlign: 'center'
 },
 details:{
   color: 'white',
-  fontFamily: 'Roboto',
-  fontSize: 10,
+  // fontFamily: 'Roboto',
+  fontSize: 12,
   textAlign: 'center'
 }
 

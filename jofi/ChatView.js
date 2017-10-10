@@ -19,7 +19,7 @@ var firebaseConfig = {
 }
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 // The actual chat view itself- a ScrollView of BubbleMessages, with an InputBar at the bottom, which moves with the keyboard
-const urlServer = 'http://d1a1b7eb.ngrok.io/chatbot'
+const urlServer = 'https://97ed7407.ngrok.io/chatbot'
 
 export default class ChatView extends Component {
 
@@ -133,7 +133,7 @@ export default class ChatView extends Component {
   }
 
   static navigationOptions = {
-    title: 'Chat',
+    title: 'Jofi',
   };
 
   //fun keyboard stuff- we use these to get the end of the ScrollView to "follow" the top of the InputBar as the keyboard rises and falls
@@ -314,13 +314,12 @@ export default class ChatView extends Component {
       }
     });
 
-    // <ScrollView ref={(ref) => { this.scrollView = ref }} style={styles.messages}>
-    //   {messages}
-    // </ScrollView>
+    console.log('messages', messages);
+    console.log('this state message', this.state.messages);
+  // <MenuButton onPress={() => this._sendLocation('send location')} style={styles.btnInsideModal}>     Send location to find jobs nearby   </MenuButton>
 
 
-    console.log('this is it brah', messages);
-    console.log('this is it the message', this.state.messages);
+
 
     return (
               <View style={styles.outer}>
@@ -347,7 +346,8 @@ export default class ChatView extends Component {
                     position='top'
                     onClosingState={this.onClosingState}>
                       <Icon name="chevron-down" size={40} color="black" style={styles.textModal} onPress={() => this.refs.modal1.close()}/>
-                      <MenuButton onPress={() => this._sendLocation('send location')} style={styles.btnInsideModal}>     Send location to find jobs nearby   </MenuButton>
+                    <MenuButton onPress={() => this._setStateAndSend('kamu siapa')} style={styles.btnInsideModal}>    Hi Jofi, who are you?      </MenuButton>
+                  <MenuButton onPress={() => this._setStateAndSend('kamu bisa apa?')} style={styles.btnInsideModal}>   How can you help me, Jofi?      </MenuButton>
                     <MenuButton onPress={() => this._setStateAndSend('mau cari kerja di kota')} style={styles.btnInsideModal}>     Find job by location      </MenuButton>
                   <MenuButton onPress={() => this._setStateAndSend('mau cari kerja sesuai bidang')} style={styles.btnInsideModal}>      Find job by specialisation       </MenuButton>
                   <MenuButton onPress={() => this._setStateAndSend('clear history')} style={styles.btnInsideModal}>      Clear history       </MenuButton>
@@ -380,7 +380,7 @@ class MessageBubbleCarousel extends Component {
             {leftSpacer}
             <View style={bubbleStyles}>
               <Button
-                color="#8f77b7"
+                color="#fff"
                 onPress={() => this.props.navigate('List', { jobs: this.props.listJobs })}
                 title='Berikut daftar pekerjaan yang kamu inginkan'
               />
@@ -461,15 +461,6 @@ class InputBar extends Component {
 
 
 
-// <ScrollView
-//     ref={ref => this.scrollView = ref}
-//     onContentSizeChange={(contentWidth, contentHeight)=>{
-//         this.scrollView.scrollToEnd({animated: true});
-//     style={styles.messages}
-//     }}>
-//     {messages}
-// </ScrollView>
-//TODO: separate these out. This is what happens when you're in a hurry!
 const styles = StyleSheet.create({
 
   //ChatView

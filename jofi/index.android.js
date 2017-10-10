@@ -28,6 +28,9 @@ const jofi = StackNavigator({
 
 });
 
+console.ignoredYellowBox = ['warning: View.protoTypes'];
+
+
 
 // export default class jofi extends Component {
 //   render() {
