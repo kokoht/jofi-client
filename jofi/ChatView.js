@@ -7,15 +7,13 @@ import AutogrowInput from 'react-native-autogrow-input';
 import * as firebase from 'firebase';
 import axios from 'axios';
 const uuidv1 = require('uuid/v1');
-
-
 import MenuButton from 'react-native-button';
 import Modal from 'react-native-modalbox';
-import Slider from 'react-native-slider';
+
 
 var firebaseConfig = {
   databaseURL: 'https://ada-firebase.firebaseio.com',
- projectId: 'ada-firebase'
+  projectId: 'ada-firebase'
 }
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 // The actual chat view itself- a ScrollView of BubbleMessages, with an InputBar at the bottom, which moves with the keyboard
@@ -44,19 +42,19 @@ export default class ChatView extends Component {
   }
 
 //function modalbox / menu
-  onClose() {
-        console.log('Modal just closed');
-      }
-      onOpen() {
-        console.log('Modal just openned');
-      }
-      onClosingState(state) {
-        console.log('the open/close of the swipeToClose just changed');
-      }
+  // onClose() {
+  //       console.log('Modal just closed');
+  //     }
+  //     onOpen() {
+  //       console.log('Modal just openned');
+  //     }
+  //     onClosingState(state) {
+  //       console.log('the open/close of the swipeToClose just changed');
+  //     }
 
   async getData(){
     const userId = await AsyncStorage.getItem('userId');
-    console.log('user ID', userId)
+    // console.log('user ID', userId)
     return userId
   }
 
@@ -65,14 +63,14 @@ export default class ChatView extends Component {
   }
 
   listenForItems(itemsRef) {
-    console.log('e masuk listenForItems')
+    // console.log('e masuk listenForItems')
     var items = [...this.state.messages]
-    console.log('just make sure the firebase correct', items);
+    // console.log('just make sure the firebase correct', items);
     itemsRef.on('child_added', (snap) => {
 
       // get children as an array
 
-      console.log('this is snap', snap)
+      // console.log('this is snap', snap)
       var directionInput = ''
       // console.log('this is the child', child)
       // console.log('this is the childs value', child.val())
@@ -99,7 +97,7 @@ export default class ChatView extends Component {
             key: snap.key,
             direction: directionInput
           });
-          console.log('this is items', items)
+          // console.log('this is items kalo clear history', items)
           this.setState({
             messages: items
           });
@@ -111,7 +109,7 @@ export default class ChatView extends Component {
             key: snap.key,
             direction: directionInput
           });
-          console.log('this is items', items)
+          // console.log('this is items ada action type tp bkn clear ', items)
           this.setState({
             messages: items
           });
@@ -124,7 +122,8 @@ export default class ChatView extends Component {
           key: snap.key,
           direction: directionInput
         });
-        console.log('this is items', items)
+        // console.log('this is items kalo gk ada action type', items)
+        // debugger
         this.setState({
           messages: items
         });
@@ -162,38 +161,38 @@ export default class ChatView extends Component {
   componentDidMount() {
    Promise.resolve(this.getData())
     .then((value) => {
-      console.log('the value from promise', value); // "Success"
+      // console.log('the value from promise', value); // "Success"
       if (value !== null) {
         randomId = JSON.parse(value)
-        console.log('the value of randomId from value', randomId);
+        // console.log('the value of randomId from value', randomId);
         this.setState({
           user: randomId.id
         });
         // var userFirebaseChild = JSON.parse(this.state.user).id
         var userFirebaseChild = this.state.user
-        console.log('userFirebaseChild is', userFirebaseChild)
+        // console.log('userFirebaseChild is', userFirebaseChild)
         this.itemsRef = this.getRef().child('jofi/'+userFirebaseChild);
         this.listenForItems(this.itemsRef);
         } else {
-         console.log('NULL brah');
+        //  console.log('NULL brah');
          randomId = {id: uuidv1()}
          this.setState({
            user: randomId.id
          });
          var userFirebaseChild = this.state.user
-         console.log('userFirebaseChild is', userFirebaseChild)
+        //  console.log('userFirebaseChild is', userFirebaseChild)
          this.itemsRef = this.getRef().child('jofi/'+userFirebaseChild);
 
          AsyncStorage.setItem('userId', JSON.stringify(randomId), (err, result) => {
-           console.log('make sure setItem asyn bener', result);
+          //  console.log('make sure setItem asyn bener', result);
          });
          this.listenForItems(randomId.id);
        }
      })
      .catch(error => {
-       console.log('error from promise get data()', error)
+      //  console.log('error from promise get data()', error)
      })
-    console.log('test the state', this.state)
+    // console.log('test the state', this.state)
     // setTimeout(function() {
     //   this.scrollView.scrollToEnd();
     // }.bind(this))
@@ -211,15 +210,15 @@ export default class ChatView extends Component {
   _sendMessage() {
     // this.state.messages.push({direction: "right", text: this.state.inputBarText});
     if (this.state.inputBarText !== '') {
-      console.log('for the axios', this.state.user)
+      // console.log('for the axios', this.state.user)
       axios.post(`${urlServer}/${this.state.user}`, {
         message: this.state.inputBarText
       })
       .then(function (response) {
-        console.log(response);
+        // console.log(response);
       })
       .catch(function (error) {
-        console.log(error);
+        // console.log(error);
       });
       // this.listenForItems(this.itemsRef)
       this.setState({
@@ -229,15 +228,15 @@ export default class ChatView extends Component {
   }
 
   _setStateAndSend (input) {
-    console.log('the input to be send to axios', input);
+    // console.log('the input to be send to axios', input);
     axios.post(`${urlServer}/${this.state.user}`, {
       message: input
     })
     .then(function (response) {
-      console.log(response);
+      // console.log(response);
     })
     .catch(function (error) {
-      console.log(error);
+      // console.log(error);
     });
     this.refs.modal1.close()
     // this.listenForItems(this.itemsRef)
@@ -251,10 +250,10 @@ export default class ChatView extends Component {
          longitude: position.coords.longitude,
          error: null,
        });
-       console.log('----------------the lat--------------', position.coords.latitude);
-       console.log('----------------the long--------------', position.coords.longitude);
-
-       console.log('----------------THIS IS THE STATE BEFORE SEND LOCATION---------------', this.state);
+      //  console.log('----------------the lat--------------', position.coords.latitude);
+      //  console.log('----------------the long--------------', position.coords.longitude);
+       //
+      //  console.log('----------------THIS IS THE STATE BEFORE SEND LOCATION---------------', this.state);
 
        axios.post(`${urlServer}/${this.state.user}`, {
          action: 'get_job_by_location',
@@ -266,16 +265,16 @@ export default class ChatView extends Component {
          }
        })
        .then(function (response) {
-         console.log('ini response yang ok -------------', response);
+        //  console.log('ini response yang ok -------------', response);
        })
        .catch(function (err) {
-         console.log('ini response yang err -------------',err);
+        //  console.log('ini response yang err -------------',err);
        });
      },
      (error) => this.setState({ error: error.message }),
      { enableHighAccuracy: false, timeout: 50000, maximumAge: 1000 },
    );
-   console.log('the input to be send to axios', input);
+  //  console.log('the input to be send to axios', input);
 
   }
 
@@ -298,7 +297,7 @@ export default class ChatView extends Component {
   render() {
     var messages = [];
     const { navigate } = this.props.navigation
-    console.log('------------------------ooo', navigate);
+    // console.log('------------------------ooo', navigate);
     // console.log('this state messages', this.state.messages);
     this.state.messages.forEach(function(message, index) {
       if (typeof message.wholeMessage.job !== 'undefined') {
@@ -313,14 +312,8 @@ export default class ChatView extends Component {
         );
       }
     });
-
-    // <ScrollView ref={(ref) => { this.scrollView = ref }} style={styles.messages}>
-    //   {messages}
-    // </ScrollView>
-
-
-    console.log('this is it brah', messages);
-    console.log('this is it the message', this.state.messages);
+    // console.log('this is it brah', messages);
+    // console.log('this is it the message', this.state.messages);
 
     return (
               <View style={styles.outer}>
@@ -370,7 +363,7 @@ class MessageBubbleCarousel extends Component {
     var bubbleStyles = this.props.direction === 'left' ? [styles.messageBubble, styles.messageBubbleLeftList] : [styles.messageBubble, styles.messageBubbleRight];
 
     var bubbleTextStyle = this.props.direction === 'left' ? styles.messageBubbleTextLeft : styles.messageBubbleTextRight;
-    console.log('-----------wawaw', this.props);
+    // console.log('-----------wawaw', this.props);
     return (
         <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
           <Image
@@ -440,7 +433,6 @@ class InputBar extends Component {
     }
   }
 
-
   render() {
     return (
           <View style={styles.inputBar}>
@@ -459,16 +451,6 @@ class InputBar extends Component {
   }
 }
 
-
-
-// <ScrollView
-//     ref={ref => this.scrollView = ref}
-//     onContentSizeChange={(contentWidth, contentHeight)=>{
-//         this.scrollView.scrollToEnd({animated: true});
-//     style={styles.messages}
-//     }}>
-//     {messages}
-// </ScrollView>
 //TODO: separate these out. This is what happens when you're in a hurry!
 const styles = StyleSheet.create({
 
@@ -492,12 +474,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 5,
     paddingVertical: 3,
+    borderTopColor: 'black'
   },
 
   textBox: {
     borderRadius: 5,
-    borderWidth: 1,
-    borderColor: 'gray',
+    borderWidth: 0,
+    borderColor: 'white',
     flex: 1,
     fontSize: 16,
     paddingHorizontal: 10
@@ -546,13 +529,16 @@ const styles = StyleSheet.create({
     color: 'white'
   },
 
-
+  inputBarStyle:{
+    borderColor: 'transparent'
+  },
 
   btnModal: {
     margin: 10,
     backgroundColor: "black",
     color: "black",
-    padding: 10
+    padding: 10,
+    borderTopColor: 'black'
   },
   btnInsideModal: {
     margin: 10,
@@ -560,16 +546,10 @@ const styles = StyleSheet.create({
     color: "white",
     padding: 10
   },
-
-
   textModal: {
     color: "black",
     fontSize: 35,
     padding: 10,
     alignSelf: 'center'
   }
-
-
-
-
 })
