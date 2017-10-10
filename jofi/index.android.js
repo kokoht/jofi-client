@@ -16,9 +16,9 @@ import {
   StackNavigator,
 } from 'react-navigation';
 
-import ChatView from './ChatView'
-import List from './ListDemo'
-import Detail from './Details'
+import ChatView from './src/screens/ChatView'
+import List from './src/screens/ListDemo'
+import Detail from './src/screens/Details'
 
 
 const jofi = StackNavigator({
