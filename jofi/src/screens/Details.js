@@ -1,9 +1,10 @@
 import React from 'react'
-import { View, FlatList, AsyncStorage, StyleSheet, Button, Text, ScrollView, Linking} from 'react-native'
+import { View, FlatList, AsyncStorage, TouchableHighlight, StyleSheet, Button, Text, ScrollView, Linking, Share} from 'react-native'
 import { NavigationActions} from 'react-navigation'
 import { Card } from "react-native-elements";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
+import styles from '../styles';
 const urlServer = 'http://d1a1b7eb.ngrok.io/chatbot'
 
 // const resetAction = NavigationActions.reset({
@@ -23,6 +24,21 @@ class Details extends React.Component {
     this.state = {
       user: ''
     }
+  }
+
+  onShare(input) {
+    Share.share({
+      message: `at ${input.location}`,
+      url: undefined,
+      title: `${input.title}`
+    }, {
+      // Android only:
+      dialogTitle: 'Share your choosen job',
+      // iOS only:
+      excludedActivityTypes: [
+        'com.apple.UIKit.activity.PostToTwitter'
+      ]
+    })
   }
 
   componentDidMount() {
@@ -69,7 +85,9 @@ class Details extends React.Component {
     var lastFiltered = firstFiltered.replace(/\//g, "");
     return (
       <ScrollView>
-      <Card>
+      <Card containerStyle={
+        {borderRadius: 5}
+      }>
 
           <Card
             containerStyle={
@@ -77,7 +95,7 @@ class Details extends React.Component {
             }
             >
           <Text style={styles.title}>{list.title}</Text>
-          {typeof list.link !== 'undefined' ? <Icon name="info-circle" size={15} alignSelf="flex-end" color="black" onPress={() => Linking.openURL(list.link)}/>: null}
+          {typeof list.link !== 'undefined' ? <Icon name="info-circle" size={15} alignSelf="center" color="black" onPress={() => Linking.openURL(list.link)}/>: null}
 
           </Card>
 
@@ -108,14 +126,21 @@ class Details extends React.Component {
 
         <Card
           containerStyle={
-            {backgroundColor: '#e8e8f9'}
+            {backgroundColor: 'white', borderColor: 'white'}
           }
           >
-          <Button
-            fontFamily='Lato'
-            onPress={() => this._setStateAndSend(list)}
-            buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0, marginTop: 50, backgroundColor: '#6ED6C1'}}
-            title='SEND EMAIL' />
+          <TouchableHighlight onPress={() => this._setStateAndSend(list)}>
+            <View style={styles.shareButton}>
+               <Icon name="send" size={12} color="white"/>
+               <Text style={styles.shareButtonText}> Send to email </Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight onPress={(list) => this.onShare(list)}>
+            <View style={styles.shareButton}>
+               <Icon name="share-alt" size={12} color="white"/>
+               <Text style={styles.shareButtonText}> Share </Text>
+            </View>
+          </TouchableHighlight>
         </Card>
 
       </Card>
@@ -123,40 +148,55 @@ class Details extends React.Component {
 
     )
   }
-
 }
 
-const styles = StyleSheet.create({
-textDetail: {
-  color: 'white',
-  fontFamily: 'Roboto',
-  fontSize: 10,
-  textAlign: 'left'
-},
-textDetailTitle: {
-  color: 'white',
-  fontFamily: 'Roboto',
-  fontSize: 12,
-  textAlign: 'center'
-},
-title: {
-  color: 'black',
-  fontFamily: 'Roboto',
-  fontSize: 20,
-  textAlign: 'center'
-},
-details:{
-  color: 'white',
-  fontFamily: 'Roboto',
-  fontSize: 12,
-  textAlign: 'center'
-}
+// <Button
+//   fontFamily='Lato'
+//   onPress={() => this._setStateAndSend(list)}
+//   buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0, marginTop: 50, backgroundColor: '#6ED6C1'}}
+//   title='SEND EMAIL' />
+//   <Button
+//     title='Share'
+//     fontFamily='Lato'
+//     buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0, marginTop: 50, backgroundColor: '#6ED6C1'}}
+//     onPress={(list) => this.onShare(list)}/>
 
-})
+// const styles = StyleSheet.create({
+// textDetail: {
+//   color: 'white',
+//   fontFamily: 'Roboto',
+//   fontSize: 10,
+//   textAlign: 'left'
+// },
+// textDetailTitle: {
+//   color: 'white',
+//   fontFamily: 'Roboto',
+//   fontSize: 12,
+//   textAlign: 'center'
+// },
+// title: {
+//   color: 'black',
+//   fontFamily: 'Roboto',
+//   fontSize: 20,
+//   textAlign: 'center'
+// },
+// details:{
+//   color: 'white',
+//   fontFamily: 'Roboto',
+//   fontSize: 12,
+//   textAlign: 'center'
+// }
+//
+// })
 
 export default Details
 
 //
+// <Icon name="send" size={15} alignSelf="flex-end" color="black"/>
+// <Icon name="save" size={15} alignSelf="flex-end" color="black"/>
+// <Icon name="map-pin" size={15} alignSelf="flex-end" color="black"/>
+// <Icon name="map" size={15} alignSelf="flex-end" color="black"/>
+// <Icon name="map-signs" size={15} alignSelf="flex-end" color="black"/>
 
 // <Card
 //   containerStyle={

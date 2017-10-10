@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { Alert, Text, View, FlatList, StyleSheet, AsyncStorage, Image, ScrollView, Button, KeyboardAvoidingView, TextInput, TouchableHighlight, Keyboard,  Dimensions} from 'react-native';
 import AutogrowInput from 'react-native-autogrow-input';
 import styles from '../styles'
@@ -26,7 +27,7 @@ export default class InputBar extends Component {
                       onContentSizeChange={this.props.onSizeChange}
                       value={this.props.text}/>
             <TouchableHighlight style={styles.sendButton} onPress={() => this.props.onSendPressed()}>
-                <Text style={{color: 'white'}}>Send</Text>
+                <Icon name="send" size={26} color="black"/>
             </TouchableHighlight>
           </View>
           );

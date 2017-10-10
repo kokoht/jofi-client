@@ -42,8 +42,52 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     paddingRight: 15,
     borderRadius: 5,
-    backgroundColor: '#6ED6C1'
+    backgroundColor: 'white'
 
+  },
+  //details
+  shareButton: {
+
+    backgroundColor: '#6ED6C1',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    borderRadius: 0,
+    marginTop: 5,
+    paddingLeft: 15,
+    marginLeft: 5,
+    paddingRight: 15
+
+  },
+
+  shareButtonText: {
+    color: 'white',
+    fontFamily: 'Roboto',
+    fontSize: 15
+  },
+
+  textDetail: {
+    color: 'white',
+    fontFamily: 'Roboto',
+    fontSize: 10,
+    textAlign: 'left'
+  },
+  textDetailTitle: {
+    color: 'white',
+    fontFamily: 'Roboto',
+    fontSize: 12,
+    textAlign: 'center'
+  },
+  title: {
+    color: 'black',
+    fontFamily: 'Roboto',
+    fontSize: 20,
+    textAlign: 'center'
+  },
+  details:{
+    color: 'white',
+    fontFamily: 'Roboto',
+    fontSize: 12,
+    textAlign: 'center'
   },
 
   //MessageBubble
@@ -80,6 +124,10 @@ const styles = StyleSheet.create({
 
   inputBarStyle:{
     borderColor: 'transparent'
+  },
+
+  modal: {
+    backgroundColor:'transparent'
   },
 
   btnModal: {
