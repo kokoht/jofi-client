@@ -77,7 +77,8 @@ class Details extends React.Component {
             }
             >
           <Text style={styles.title}>{list.title}</Text>
-          <Icon name="info-circle" size={15} alignSelf="flex-end" color="black" onPress={() => Linking.openURL(list.link)}/>
+          {typeof list.link !== 'undefined' ? <Icon name="info-circle" size={15} alignSelf="flex-end" color="black" onPress={() => Linking.openURL(list.link)}/>: null}
+
           </Card>
 
           <Card
@@ -86,20 +87,24 @@ class Details extends React.Component {
             }
             >
             <Text style={styles.details}>Located at {list.location}</Text>
-            <Text style={styles.details}>Published on {list.pubDate.replace("Z", "")}</Text>
+            {typeof list.pubDate !== 'undefined' ? <Text style={styles.details}>Published on {list.pubDate.replace("Z", "")}</Text> : null}
           </Card>
 
+
+        {typeof list.category !== 'undefined' ?
         <Card
           containerStyle={
             {backgroundColor: '#8f77b7'}
           }
           >
+
         <Text style={styles.textDetailTitle}>Requirement:</Text>
               <FlatList
               data={list.category.map((item, index) => ({text: item, key: index}))}
               renderItem={({item}) => <Text key={item.key} style={styles.textDetail}>{item.text}</Text>}
             />
         </Card>
+        : null}
 
         <Card
           containerStyle={
