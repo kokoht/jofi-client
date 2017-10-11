@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
 
   messageBubble: {
       borderRadius: 5,
-      marginTop: 20,
+      marginTop: 8,
       marginRight: 10,
       marginLeft: 10,
       paddingHorizontal: 10,
