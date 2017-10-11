@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     margin: 10,
     backgroundColor: "#8f77b7",
     color: "white",
-    padding: 10
+    padding: 5
   },
   textModal: {
     color: "black",
