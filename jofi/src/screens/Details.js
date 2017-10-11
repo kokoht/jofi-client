@@ -34,8 +34,15 @@ class Details extends React.Component {
   };
 
   onShare(input) {
+    console.log('this is the share', input)
+    let message = ''
+    if (input.link) {
+      message = `${input.title} (check it at ${input.link}). With <3 by Jofi.`
+    } else {
+      message = `${input.title} at ${input.location}. With <3 by Jofi.`
+    }
     Share.share({
-      message: `at ${input.location}`,
+      message: message,
       url: undefined,
       title: `${input.title}`
     }, {
@@ -46,6 +53,7 @@ class Details extends React.Component {
         'com.apple.UIKit.activity.PostToTwitter'
       ]
     })
+
   }
 
   componentDidMount() {
@@ -141,7 +149,7 @@ class Details extends React.Component {
                <Text style={styles.shareButtonText}> Send to email </Text>
             </View>
           </TouchableHighlight>
-          <TouchableHighlight underlayColor='white' onPress={(list) => this.onShare(list)}>
+          <TouchableHighlight underlayColor='white' onPress={() => this.onShare(list)}>
             <View style={styles.shareButton}>
                <Icon name="share-alt" size={12} color="white"/>
                <Text style={styles.shareButtonText}> Share </Text>
