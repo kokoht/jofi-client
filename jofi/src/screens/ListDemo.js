@@ -5,13 +5,17 @@ import { List, ListItem, Icon} from "react-native-elements";
 
 class ListDemo extends React.Component {
 
+  static navigationOptions = {
+    headerStyle: { height: 35 },
+  };
+
   render() {
     // console.log('-----------------------');
     // console.log('the navigation', this.props.navigation.state);
     const list = this.props.navigation.state.params.jobs
     return (
       <ScrollView>
-        <List>
+        <List containerStyle={{marginTop: 0}}>
           {
           list.map((l, i) => (
             <ListItem
