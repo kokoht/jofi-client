@@ -104,14 +104,15 @@ const styles = StyleSheet.create({
   },
 
   messageBubbleLeft: {
-    backgroundColor: '#d5d8d4',
+    backgroundColor: '#ECEFF1',
   },
   messageBubbleLeftList: {
-    backgroundColor: '#8f77b7',
+    backgroundColor: '#8f77b7'
   },
 
   messageBubbleTextLeft: {
-    color: 'black'
+    color: 'black',
+    fontFamily: 'Roboto'
   },
 
   messageBubbleRight: {
@@ -119,7 +120,8 @@ const styles = StyleSheet.create({
   },
 
   messageBubbleTextRight: {
-    color: 'white'
+    color: 'white',
+    fontFamily: 'Roboto'
   },
 
   inputBarStyle:{
@@ -127,7 +129,7 @@ const styles = StyleSheet.create({
   },
 
   modal: {
-    backgroundColor:'transparent'
+    backgroundColor:'white'
   },
 
   btnModal: {

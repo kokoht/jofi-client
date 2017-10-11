@@ -15,7 +15,7 @@ export default class MessageBubbleJobList extends Component {
     return (
         <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
           <Image
-            style={{width: 36, height: 36, borderRadius: 18, alignSelf: 'center'}}
+            style={{width: 36, height: 36, borderRadius: 18, alignSelf: 'center', marginLeft: 16}}
             source={require('../jofi.jpg')}
           />
             {leftSpacer}

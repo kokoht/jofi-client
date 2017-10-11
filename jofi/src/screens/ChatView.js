@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Alert, Text, View, FlatList, StyleSheet, AsyncStorage, Image, ScrollView, Button, KeyboardAvoidingView, TextInput, TouchableHighlight, Keyboard,  Dimensions} from 'react-native';
 // import { Container, Header, DeckSwiper, Card, CardItem, Thumbnail, Left, Body, Icon } from 'native-base';
 // import KeyboardSpacer from 'react-native-keyboard-spacer';
+import SplashScreen from 'react-native-splash-screen'
 import MessageBubble from '../components/MessageBubble'
 import MessageBubbleJobList from '../components/MessageBubbleJobList'
 import InputBar from '../components/InputBar'
@@ -124,10 +125,12 @@ export default class ChatView extends Component {
         });
       }
     });
+    // SplashScreen.hide();
   }
 
   static navigationOptions = {
     title: 'Jofi',
+    headerStyle: { height: 35 },
   };
 
   //fun keyboard stuff- we use these to get the end of the ScrollView to "follow" the top of the InputBar as the keyboard rises and falls
@@ -309,7 +312,7 @@ export default class ChatView extends Component {
     });
     // console.log('this is it brah', messages);
     // console.log('this is it the message', this.state.messages);
-
+    SplashScreen.hide();
     return (
               <View style={styles.outer}>
 
