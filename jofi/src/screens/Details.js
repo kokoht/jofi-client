@@ -13,6 +13,9 @@ const urlServer = 'http://jofi-server-dev.ap-southeast-1.elasticbeanstalk.com/ch
 //     NavigationActions.navigate({ routeName: 'Main'})
 //   ]
 // })
+
+
+
 const resetAction = NavigationActions.navigate({ routeName: 'Main'})
 
 class Details extends React.Component {
@@ -25,6 +28,10 @@ class Details extends React.Component {
       user: ''
     }
   }
+
+  static navigationOptions = {
+    headerStyle: { height: 35 },
+  };
 
   onShare(input) {
     Share.share({
