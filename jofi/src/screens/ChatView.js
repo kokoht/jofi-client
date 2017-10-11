@@ -269,11 +269,17 @@ export default class ChatView extends Component {
         //  console.log('ini response yang err -------------',err);
        });
      },
-     (error) => this.setState({ error: error.message }),
-     { enableHighAccuracy: false, timeout: 50000, maximumAge: 1000 },
+     (error) => {
+       this.setState({ error: error.message })
+       Alert.alert(
+        'Opps! Sorry master..',
+        'Jofi tidak dapat mendapatkan koordinasi lokasi anda dengan cepat. Coba lagi dong..'
+       )
+     },
+     { enableHighAccuracy: false, timeout: 30000, maximumAge: 1000 },
    );
   //  console.log('the input to be send to axios', input);
-
+    this.refs.modal1.close()
   }
 
   _onChangeInputBarText(text) {
@@ -338,11 +344,14 @@ export default class ChatView extends Component {
                     position='top'
                     onClosingState={this.onClosingState}>
                       <Icon name="chevron-down" size={40} color="black" style={styles.textModal} onPress={() => this.refs.modal1.close()}/>
-                      <MenuButton onPress={() => this._sendLocation('send location')} style={styles.btnInsideModal}>     Send location to find jobs nearby   </MenuButton>
-                    <MenuButton onPress={() => this._setStateAndSend('mau cari kerja di kota')} style={styles.btnInsideModal}>     Find job by location      </MenuButton>
-                  <MenuButton onPress={() => this._setStateAndSend('mau cari kerja sesuai bidang')} style={styles.btnInsideModal}>      Find job by specialisation       </MenuButton>
-                  <MenuButton onPress={() => this._setStateAndSend('clear history')} style={styles.btnInsideModal}>      Clear history       </MenuButton>
-
+                      <MenuButton onPress={() => this._sendLocation('send location')} style={styles.btnInsideModal}>     Find nearest jobs  </MenuButton>
+                    <MenuButton onPress={() => this._setStateAndSend('mau cari kerja di kota')} style={styles.btnInsideModal}>     Find jobs based on location     </MenuButton>
+                  <MenuButton onPress={() => this._setStateAndSend('mau cari kerja sesuai bidang')} style={styles.btnInsideModal}>      Find jobs based on specialisation       </MenuButton>
+                  <MenuButton onPress={() => this._setStateAndSend('saya lagi nganggur nih jof')} style={styles.btnInsideModal}>      No jobs yet    </MenuButton>
+                  <MenuButton onPress={() => this._setStateAndSend('kamu siapa')} style={styles.btnInsideModal}>      Who is Jofi     </MenuButton>
+                  <MenuButton onPress={() => this._setStateAndSend('apa yang kamu bisa lakukan')} style={styles.btnInsideModal}>      Jofi's skills     </MenuButton>
+                  <MenuButton onPress={() => this._setStateAndSend('tutorial menggunakan kamu')} style={styles.btnInsideModal}>      How to use Jofi      </MenuButton>
+                  <MenuButton onPress={() => this._setStateAndSend('clear history')} style={styles.btnInsideModal}>      Clear history      </MenuButton>
                   </Modal>
                   <InputBar onSendPressed={() => this._sendMessage()}
                             onChangeText={(text) => this._onChangeInputBarText(text)}
