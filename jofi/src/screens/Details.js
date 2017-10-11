@@ -5,8 +5,8 @@ import { Card } from "react-native-elements";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
 import styles from '../styles';
-const urlServer = 'http://d1a1b7eb.ngrok.io/chatbot'
-
+const urlServer = 'http://jofi-server-dev.ap-southeast-1.elasticbeanstalk.com/chatbot'
+// if you want to reset not navigate
 // const resetAction = NavigationActions.reset({
 //   index: 0,
 //   actions: [
@@ -95,7 +95,7 @@ class Details extends React.Component {
             }
             >
           <Text style={styles.title}>{list.title}</Text>
-          {typeof list.link !== 'undefined' ? <Icon name="info-circle" size={15} alignSelf="center" color="black" onPress={() => Linking.openURL(list.link)}/>: null}
+          {(list.link) ? <Icon name="info-circle" size={15} alignSelf="center" color="black" onPress={() => Linking.openURL(list.link)}/>: null}
 
           </Card>
 
@@ -109,7 +109,7 @@ class Details extends React.Component {
           </Card>
 
 
-        {typeof list.category !== 'undefined' ?
+        {(list.category && list.category.length > 0) ?
         <Card
           containerStyle={
             {backgroundColor: '#8f77b7'}
@@ -121,21 +121,20 @@ class Details extends React.Component {
               data={list.category.map((item, index) => ({text: item, key: index}))}
               renderItem={({item}) => <Text key={item.key} style={styles.textDetail}>{item.text}</Text>}
             />
-        </Card>
-        : null}
+        </Card> : null}
 
         <Card
           containerStyle={
-            {backgroundColor: 'white', borderColor: 'white'}
+            {backgroundColor: 'white', borderColor: 'white', borderWidth: 0, margin: 0}
           }
           >
-          <TouchableHighlight onPress={() => this._setStateAndSend(list)}>
+          <TouchableHighlight underlayColor='white' onPress={() => this._setStateAndSend(list)}>
             <View style={styles.shareButton}>
                <Icon name="send" size={12} color="white"/>
                <Text style={styles.shareButtonText}> Send to email </Text>
             </View>
           </TouchableHighlight>
-          <TouchableHighlight onPress={(list) => this.onShare(list)}>
+          <TouchableHighlight underlayColor='white' onPress={(list) => this.onShare(list)}>
             <View style={styles.shareButton}>
                <Icon name="share-alt" size={12} color="white"/>
                <Text style={styles.shareButtonText}> Share </Text>

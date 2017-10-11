@@ -23,7 +23,7 @@ var firebaseConfig = {
 }
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 // The actual chat view itself- a ScrollView of BubbleMessages, with an InputBar at the bottom, which moves with the keyboard
-const urlServer = 'http://d1a1b7eb.ngrok.io/chatbot'
+const urlServer = 'http://jofi-server-dev.ap-southeast-1.elasticbeanstalk.com/chatbot'
 
 export default class ChatView extends Component {
 

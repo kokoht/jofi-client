@@ -26,7 +26,7 @@ export default class InputBar extends Component {
                       onChangeText={(text) => this.props.onChangeText(text)}
                       onContentSizeChange={this.props.onSizeChange}
                       value={this.props.text}/>
-            <TouchableHighlight style={styles.sendButton} onPress={() => this.props.onSendPressed()}>
+                    <TouchableHighlight style={styles.sendButton} underlayColor='white' onPress={() => this.props.onSendPressed()}>
                 <Icon name="send" size={26} color="black"/>
             </TouchableHighlight>
           </View>

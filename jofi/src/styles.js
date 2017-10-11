@@ -22,10 +22,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 5,
-    paddingVertical: 3,
-    borderTopColor: 'black'
+    paddingVertical: 3
   },
-
+  // ,
+  // borderTopColor: 'black'
   textBox: {
     borderRadius: 5,
     borderWidth: 0,
@@ -131,13 +131,11 @@ const styles = StyleSheet.create({
   modal: {
     backgroundColor:'white'
   },
-
+// backgroundColor: "black",
   btnModal: {
     margin: 10,
-    backgroundColor: "black",
     color: "black",
-    padding: 10,
-    borderTopColor: 'black'
+    padding: 10
   },
   btnInsideModal: {
     margin: 10,
