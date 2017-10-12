@@ -5,11 +5,6 @@ import AutogrowInput from 'react-native-autogrow-input';
 import styles from '../styles'
 export default class InputBar extends Component {
 
-  //AutogrowInput doesn't change its size when the text is changed from the outside.
-  //Thus, when text is reset to zero, we'll call it's reset function which will take it back to the original size.
-  //Another possible solution here would be if InputBar kept the text as state and only reported it when the Send button
-  //was pressed. Then, resetInputText() could be called when the Send button is pressed. However, this limits the ability
-  //of the InputBar's text to be set from the outside.
   componentWillReceiveProps(nextProps) {
     if(nextProps.text === '') {
       this.autogrowInput.resetInputText();

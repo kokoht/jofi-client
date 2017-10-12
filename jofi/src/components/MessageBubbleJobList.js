@@ -13,21 +13,23 @@ export default class MessageBubbleJobList extends Component {
     var bubbleTextStyle = this.props.direction === 'left' ? styles.messageBubbleTextLeft : styles.messageBubbleTextRight;
     // console.log('-----------wawaw', this.props);
     return (
-        <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
-          <Image
-            style={{width: 36, height: 36, borderRadius: 18, alignSelf: 'center', marginLeft: 16}}
-            source={require('../jofi.jpg')}
-          />
-            {leftSpacer}
-            <View style={bubbleStyles}>
-              <Button
-                color="#8f77b7"
-                onPress={() => this.props.navigate('List', { jobs: this.props.listJobs })}
-                title='Berikut daftar pekerjaan yang kamu inginkan'
-              />
-            </View>
-            {rightSpacer}
+      <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
+        <Image
+          style={{width: 36, height: 36, borderRadius: 18, alignSelf: 'center', marginLeft: 16}}
+          source={require('../jofi.jpg')}
+        />
+          {leftSpacer}
+
+          <View style={bubbleStyles}>
+            <Button
+              color="#8f77b7"
+              onPress={() => this.props.navigate('List', { jobs: this.props.listJobs })}
+              title='Berikut daftar pekerjaan yang kamu inginkan'
+            />
           </View>
+
+          {rightSpacer}
+      </View>
       );
   }
 }
