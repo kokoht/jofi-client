@@ -131,6 +131,10 @@ export default class ChatView extends Component {
     this.scrollView.scrollToEnd();
   }
 
+  keyboardDidHide (e) {
+    this.scrollView.scrollToEnd();
+  }
+
   componentDidMount() {
     // check whether the userId already exists in async storage of the mobile
    Promise.resolve(this.getData())
