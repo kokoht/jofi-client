@@ -10,8 +10,6 @@ class ListDemo extends React.Component {
   };
 
   render() {
-    // console.log('-----------------------');
-    // console.log('the navigation', this.props.navigation.state);
     const list = this.props.navigation.state.params.jobs
     return (
       <ScrollView>
@@ -28,7 +26,7 @@ class ListDemo extends React.Component {
           ))
         }
         </List>
-       </ScrollView>
+      </ScrollView>
     )
   }
 
